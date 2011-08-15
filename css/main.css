@@ -1,0 +1,108 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent; }
+
+.fake-body {
+  background-color: white;
+  color: black;
+  position: relative;
+  width: 960px;
+  height: 540px; }
+
+.splash #logo {
+  background: url(../resource/images/splash.png) center center no-repeat;
+  width: 960px;
+  height: 540px; }
+
+.dashboard .box {
+  color: #aaaaaa;
+  border: 1px black solid;
+  padding: 10px;
+  position: absolute;
+  width: 720px;
+  height: 223px; }
+.dashboard #color-changer {
+  left: 120px;
+  top: 20px; }
+.dashboard #calculator-box {
+  left: 120px;
+  top: 263px; }
+.dashboard .calculator-help {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 350px;
+  height: 180px; }
+
+#calculator {
+  position: absolute;
+  left: 360px;
+  top: 10px;
+  width: 350px;
+  height: 180px;
+  /* TODO This is not working, learn how to make an element scrollable */
+  overflow: scroll; }
+  #calculator div {
+    margin-right: auto;
+    text-align: right; }
+  #calculator .calc-line {
+    display: block;
+    width: 100%; }
+  #calculator .operator {
+    display: inline-block; }
+
+.operand {
+  display: inline-block; }
+
+.nav-key {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 960px;
+  height: 34px;
+  background: #888888;
+  color: white;
+  z-index: 10000; }
+  .nav-key .key-helper {
+    position: absolute;
+    bottom: 6px; }
+    .nav-key .key-helper .key-icon {
+      display: inline-block;
+      width: 17px;
+      height: 16px;
+      margin-right: 3px; }
+    .nav-key .key-helper .key-desc {
+      display: inline-block; }
+  .nav-key #nav-up-down {
+    left: 9px; }
+    .nav-key #nav-up-down .key-icon {
+      background: url("../resource/images/button_up-down.png") left top no-repeat; }
+  .nav-key #nav-left-right {
+    left: 109px; }
+    .nav-key #nav-left-right .key-icon {
+      background: url("../resource/images/button_left-right.png") left top no-repeat; }
+  .nav-key #nav-enter {
+    left: 227px; }
+    .nav-key #nav-enter .key-icon {
+      background: url("../resource/images/button_enter.png") left top no-repeat; }
+  .nav-key #nav-return {
+    left: 336px; }
+    .nav-key #nav-return .key-icon {
+      background: url("../resource/images/button_return.png") left top no-repeat; }
+  .nav-key #nav-A {
+    left: 445px; }
+    .nav-key #nav-A .key-icon {
+      background: url("../resource/images/button_A.png") left top no-repeat; }
+  .nav-key #nav-B {
+    left: 554px; }
+    .nav-key #nav-B .key-icon {
+      background: url("../resource/images/button_B.png") left top no-repeat; }
+  .nav-key #nav-C {
+    left: 663px; }
+    .nav-key #nav-C .key-icon {
+      background: url("../resource/images/button_C.png") left top no-repeat; }
+  .nav-key #nav-D {
+    left: 772px; }
+    .nav-key #nav-D .key-icon {
+      background: url("../resource/images/button_D.png") left top no-repeat; }

@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/div/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>${app-name}</title>
+
+        <script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/jquery.js'></script>
+
+		<script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/Widget.js'></script>
+		<script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/TVKeyValue.js'></script>
+
+        <script type="text/javascript" src="js/appbase.js"></script>
+        <script type="text/javascript" src="js/screen.js"></script>
+        <script type="text/javascript" src="js/splash.js"></script>
+        <script type="text/javascript">
+            log.level = log.levels.DEBUG;
+            // TODO: Why not make this a singleton?
+            var tvScreen = new TVApp.Splash(".fake-body");
+        </script>
+        
+		<link rel="stylesheet" href="css/main.css" type="text/css">
+	</head>
+
+	<body class="splash" onload="tvScreen.onLoad();">
+    
+		<!-- Dummy anchor as focus for key events -->
+		<a href="javascript:void(0);" id="keyListener" onkeydown="tvScreen.onKeyDown();"></a>
+
+        <div class="fake-body">
+            <div id="logo"></div>
+        </div>
+
+	</body>
+</html>

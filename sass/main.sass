@@ -1,0 +1,127 @@
+$topmost: 10000
+$pageWidth: 960px
+$pageHeight: 540px
+
+body
+    margin: 0
+    padding: 0
+    background: transparent
+
+.fake-body
+    background-color: white
+    color: black
+    position: relative
+    width: $pageWidth
+    height: $pageHeight
+
+.splash
+    #logo
+        background: url(../resource/images/splash.png) center center no-repeat
+        width: $pageWidth
+        height: $pageHeight
+
+.dashboard
+    .box
+        color: #aaa
+        border: 1px black solid
+        padding: 10px
+        position: absolute
+        width: 720px
+        height: 223px
+
+    #color-changer
+        left: 120px
+        top: 20px
+
+    #calculator-box
+        left: 120px
+        top: 263px
+
+    .calculator-help
+        position: absolute
+        left: 10px
+        top: 10px
+        width: 350px
+        height: 180px
+
+#calculator
+    position: absolute
+    left: 360px
+    top: 10px
+    width: 350px
+    height: 180px
+    /* TODO This is not working, learn how to make an element scrollable
+    overflow: scroll
+
+    div
+        margin-right: auto
+        text-align: right
+
+    .calc-line
+        display: block
+        width: 100%
+
+    .operator
+        display: inline-block
+
+.operand
+    display: inline-block
+
+@mixin key-icon-bg($imgUrl)
+    .key-icon
+        background: url($imgUrl) left top no-repeat
+
+.nav-key
+    position: absolute
+    left: 0
+    bottom: 0
+    width: $pageWidth
+    height: 34px
+    background: #888
+    color: white
+    z-index: $topmost
+
+    .key-helper
+        position: absolute
+        bottom: 6px
+        .key-icon
+            display: inline-block
+            width: 17px
+            height: 16px
+            margin-right: 3px
+        .key-desc
+            display: inline-block
+
+    $navKeyPad: 9px
+    $navKeyWidth: 100px
+    #nav-up-down
+        left: $navKeyPad
+        @include key-icon-bg('../resource/images/button_up-down.png')
+
+    #nav-left-right
+        left: $navKeyPad + $navKeyWidth
+        @include key-icon-bg('../resource/images/button_left-right.png')
+
+    #nav-enter
+        left: $navKeyPad + ($navKeyWidth + $navKeyPad) * 2
+        @include key-icon-bg('../resource/images/button_enter.png')
+
+    #nav-return
+        left: $navKeyPad + ($navKeyWidth + $navKeyPad) * 3
+        @include key-icon-bg('../resource/images/button_return.png')
+
+    #nav-A
+        left: $navKeyPad + ($navKeyWidth + $navKeyPad) * 4
+        @include key-icon-bg('../resource/images/button_A.png')
+
+    #nav-B
+        left: $navKeyPad + ($navKeyWidth + $navKeyPad) * 5
+        @include key-icon-bg('../resource/images/button_B.png')
+
+    #nav-C
+        left: $navKeyPad + ($navKeyWidth + $navKeyPad) * 6
+        @include key-icon-bg('../resource/images/button_C.png')
+
+    #nav-D
+        left: $navKeyPad + ($navKeyWidth + $navKeyPad) * 7
+        @include key-icon-bg('../resource/images/button_D.png')

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/div/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>${app-name}</title>
+        
+        <script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/jquery.js'></script>
+
+		<script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/Widget.js'></script>
+		<script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/TVKeyValue.js'></script>
+
+        <script type="text/javascript" src="../js/appbase.js"></script>
+        <script type="text/javascript" src="../js/app.js"></script>
+        <script type="text/javascript" src="../js/dashboard.js"></script>
+        <script type="text/javascript">
+            log.level = log.levels.DEBUG;
+            // TODO: Why not make this a singleton?
+            var tvScreen = new TVApp.Dashboard(".fake-body");
+        </script>
+
+		<link rel="stylesheet" href="../css/main.css" type="text/css">
+	</head>
+
+	<body class="dashboard" onload="tvScreen.onLoad();">
+    
+		<!-- Dummy anchor as focus for key events -->
+		<a href="javascript:void(0);" id="keyListener" onkeydown="tvScreen.onKeyDown();"></a>
+
+        <div class="fake-body">
+            <div id="color-changer" class="box">
+                Press color remote keys to change this box's color<br>
+                Press Enter to revert to white
+                Press Down button to switch to the box below
+                This key reference will shortly be in a custom component :)
+            </div>
+            <div id="calculator-box" class="box">
+                <div class="calculator-help">
+                    Use this box as a simple calculator <br>
+                    Press BLUE to add, RED to substract, <br>
+                    GREEN to multiply and YELLOW to divide <br>
+                    Press Return to clear history
+                </div>
+                <div id="calculator">
+                    <div class="calc-line">
+                        <div class="operator"></div>
+                        <div class="operand"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+	</body>
+</html>
