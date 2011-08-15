@@ -1,6 +1,11 @@
 class Splash extends TVApp.Screen
-    TIMEOUT: 300 #0
-    
+    timeout: 300 #0
+
+    constructor: (fakeBodySelector, nextPageUri, timeout) ->
+        @timeout = timeout if timeout?
+        super(fakeBodySelector)
+        @nextPageUri = nextPageUri
+
     onLoad: ->
         log.debug "Splash.onLoad"
         super()
@@ -10,10 +15,10 @@ class Splash extends TVApp.Screen
         that = this
         @timer = setTimeout(
             -> that.advance(),
-            @TIMEOUT)
+            @timeout)
     
     advance: ->
         log.debug "Advancing to main screen"
-        @loadPage "html/dashboard.html"
+        @loadPage @nextPageUri
 
 TVApp.Splash = Splash

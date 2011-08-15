@@ -10,10 +10,14 @@
   };
   Splash = (function() {
     __extends(Splash, TVApp.Screen);
-    function Splash() {
-      Splash.__super__.constructor.apply(this, arguments);
+    Splash.prototype.timeout = 300;
+    function Splash(fakeBodySelector, nextPageUri, timeout) {
+      if (timeout != null) {
+        this.timeout = timeout;
+      }
+      Splash.__super__.constructor.call(this, fakeBodySelector);
+      this.nextPageUri = nextPageUri;
     }
-    Splash.prototype.TIMEOUT = 300;
     Splash.prototype.onLoad = function() {
       log.debug("Splash.onLoad");
       Splash.__super__.onLoad.call(this);
@@ -24,11 +28,11 @@
       that = this;
       return this.timer = setTimeout(function() {
         return that.advance();
-      }, this.TIMEOUT);
+      }, this.timeout);
     };
     Splash.prototype.advance = function() {
       log.debug("Advancing to main screen");
-      return this.loadPage("html/dashboard.html");
+      return this.loadPage(this.nextPageUri);
     };
     return Splash;
   })();
