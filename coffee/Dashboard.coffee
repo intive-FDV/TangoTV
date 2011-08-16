@@ -17,16 +17,22 @@ class Dashboard extends TVApp.Screen
             handler = {}
             handler[@tvKey.KEY_RED] = ->
                 setColor "red"
+
             handler[@tvKey.KEY_GREEN] = ->
                 setColor "green"
+
             handler[@tvKey.KEY_YELLOW] = ->
                 setColor "yellow"
+
             handler[@tvKey.KEY_BLUE] = ->
                 setColor "blue"
+
             handler[@tvKey.KEY_ENTER] = ->
                 setColor "white"
+
             handler[@tvKey.KEY_DOWN] = =>
                 @setKeyHandler @calculator
+
             handler.keyRef =
                 "up-down": "Switch boxes"
                 "enter": "White"
@@ -34,8 +40,7 @@ class Dashboard extends TVApp.Screen
                 "B": "Green"
                 "C": "Yellow"
                 "D": "Blue"
-
-
+                
             return handler
 
         # TODO Move to its own class
