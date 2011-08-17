@@ -21,8 +21,9 @@ class Menu
     unselectedClass: "menu-item-unselected"
 
     createItems: ->
-        for option in @options
-            @container.append $("<li class=\"#{@unselectedClass}\">#{option.html}</li>")
+        evenness = ["odd", "even"]
+        for index in [0 ... @options.length]
+            @container.append $("<li class=\"#{@unselectedClass} #{evenness[index % 2]}\">#{@options[index].html}</li>")
         @selectItem @selected
 
     selectItem: (index) ->

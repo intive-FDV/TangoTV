@@ -22,11 +22,10 @@
     Menu.prototype.selectedClass = "menu-item-selected";
     Menu.prototype.unselectedClass = "menu-item-unselected";
     Menu.prototype.createItems = function() {
-      var option, _i, _len, _ref;
-      _ref = this.options;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        option = _ref[_i];
-        this.container.append($("<li class=\"" + this.unselectedClass + "\">" + option.html + "</li>"));
+      var evenness, index, _ref;
+      evenness = ["odd", "even"];
+      for (index = 0, _ref = this.options.length; 0 <= _ref ? index < _ref : index > _ref; 0 <= _ref ? index++ : index--) {
+        this.container.append($("<li class=\"" + this.unselectedClass + " " + evenness[index % 2] + "\">" + this.options[index].html + "</li>"));
       }
       return this.selectItem(this.selected);
     };
