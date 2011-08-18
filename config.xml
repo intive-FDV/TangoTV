@@ -24,7 +24,7 @@
 	<author itemtype="group">
 		<name itemtype="string">Esteban Invernizzi</name>
 		<email itemtype="string">esteban.invernizzi@fdvsolutions.com</email>
-		<link itemtype="string"></link>
-		<organization itemtype="string"></organization>
+		<link itemtype="string">http://www.fdvsolutions.com/</link>
+		<organization itemtype="string">FDV Solutions</organization>
 	</author>
 </widget>
