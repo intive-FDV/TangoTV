@@ -10,9 +10,9 @@ class NavKey
         "enter",
         "return",
         "A", # RED
-        "B", # TODO Document colors
-        "C", #
-        "D"  #
+        "B", # GREEN
+        "C", # YELLOW
+        "D"  # BLUE
     ]
 
     constructor: (containerSelector, keyRef) ->
@@ -64,6 +64,7 @@ class Screen
         @keyHandler = handler
         @displayNavKey handler.keyRef if handler?.keyRef?
 
+    # TODO Add listener anchor programmatically
     enableKeys: (listenerId) ->
         $("##{listenerId}").focus()
     
