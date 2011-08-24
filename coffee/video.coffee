@@ -39,31 +39,55 @@ class TVApp.VideoPlayer
         log.debug "Video player positioned in (#{x0},#{y0}), (#{x1},#{y1})"
 
     toggleFullscreen: ->
-        wasPlaying = (@status == PLAYING)
-        @stop() if wasPlaying # TODO Change stop and play for Pause and Unpause
+        @pause()
         @fullscreen = !@fullscreen
         @position @getCurrentDimensions()
-        @play() if wasPlaying
+        @resume()
         log.debug "Video fullscreen #{if @fullscreen then "on" else "off"}"
-        log.debug "Was#{if wasPlaying then "" else "n't"} playing when fullscreen toggled"
 
-    play: ->
-        if @cfg.url == null
-            log.error "No URL to play"
-            return # TODO Throw something
+    togglePause: ->
+        if @status == PAUSED
+            @resume()
+        else if @status == PLAYING
+            @pause()
+        else
+            log.info "togglePause(): Not playing, ignoring"
 
-        @plugin.Play(@cfg.url)
-        @status = PLAYING
-        log.info "Playing video #{@cfg.url}"
-
-    stop: ->
-        if @status == STOPPED
-            log.warn "stop(): Already stopped, ignoring"
-            return
-
-        @plugin.Stop()
-        @status = STOPPED
-        log.info "Video playback stopped"
+    # Should use State pattern here?
+    play: ->                                          #
+        if @cfg.url == null                              #
+            log.error "No URL to play"                     #
+            return # TODO Throw something                   #
+                                                             #
+        @plugin.Play(@cfg.url)                               #
+        @status = PLAYING                                    #
+        log.info "Playing video #{@cfg.url}"                 #
+                                                             #
+    pause: ->                                                #
+        if @status != PLAYING                                #
+            log.warn "pause(): Not playing, ignoring"        #
+            return                                           #
+                                                             #
+        @plugin.Pause()                                       #
+        @status = PAUSED                                       #.
+        log.info "Video playback paused"                         #-  Should use State pattern here?
+                                                               #´
+    resume: ->                                                #
+        if @status != PAUSED                                 #
+            log.warn "resume(): Not paused, ignoring"        #
+                                                             #
+        @plugin.Resume()                                     #
+        @status = PLAYING                                    #
+        log.info "Video playback resumed"                    #
+                                                             #
+    stop: ->                                                 #
+        if @status == STOPPED                                #
+            log.warn "stop(): Already stopped, ignoring"     #
+            return                                           #
+                                                            #
+        @plugin.Stop()                                     #
+        @status = STOPPED                                #
+        log.info "Video playback stopped"             #
 
     constructor: (config) ->
         @status = STOPPED
@@ -76,12 +100,15 @@ class TVApp.VideoPlayer
             return # Throw something
 
         # Big WTF for Samsung here
-        TVApp.video =
-            setCurTime: => @setCurTime(arguments)
+        TVApp.__video =
+            setCurTime: =>
+                log.debug "Current time in TVApp.__video: #{arguments[0]}"
+                @setCurTime(arguments)
             setTotalTime: => @setTotalTime(arguments)
             onBufferingStart: => @onBufferingStart(arguments)
             onBufferingProgress: => @onBufferingProgress(arguments)
             onBufferingComplete: => @onBufferingComplete(arguments)
+        TVApp.setCurTime = => @setCurTime(arguments)
 
         @plugin.OnCurrentPlayTime = "TVApp.__video.setCurTime"
         @plugin.OnStreamInfoReady = "TVApp.__video.setTotalTime"
@@ -96,7 +123,7 @@ class TVApp.VideoPlayer
 #        @plugin.OnBufferingProgress = => @onBufferingProgress(arguments)
 #        @plugin.OnBufferingComplete = => @onBufferingComplete(arguments)
 
-    setCurTime: (time) -> log.trace "Current time: #{time}"
+    setCurTime: (time) -> log.debug "Current time: #{time}"
     setTotalTime: (time) -> log.debug "Total time: #{time}"
     onBufferingStart: -> log.debug "Buffering..."
     onBufferingProgress: (pctg) -> log.debug "Buffering #{pctg}%"
@@ -110,7 +137,7 @@ window.getBandwidth = (bandwidth) -> log.trace "getBandwidth #{bandwidth}"
 window.onDecoderReady = -> log.trace "onDecoderReady"
 window.onRenderError = -> log.trace "onRenderError"
 window.popupNetworkErr = -> log.trace "popupNetworkErr"
-window.setCurTime = (time) -> log.trace "setCurTime #{time}"
+window.setCurTime = (time) -> log.debug "setCurTime #{time}"
 window.setTottalTime = (time) -> log.trace "setTottalTime #{time}"
 window.stopPlayer = -> log.info "Video stopped (stopPlayer)"
 window.setTottalBuffer = (buffer) -> log.trace "setTottalBuffer #{buffer}"

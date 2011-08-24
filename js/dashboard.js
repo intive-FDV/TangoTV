@@ -217,6 +217,9 @@
       this.keyHandler[tvKey.KEY_PLAY] = __bind(function() {
         return this.player.play();
       }, this);
+      this.keyHandler[tvKey.KEY_PAUSE] = __bind(function() {
+        return this.player.togglePause();
+      }, this);
       this.keyHandler[tvKey.KEY_STOP] = __bind(function() {
         return this.player.stop();
       }, this);

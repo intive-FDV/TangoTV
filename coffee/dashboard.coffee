@@ -172,6 +172,7 @@ class Video extends HiddableContent
         tvKey = new Common.API.TVKeyValue()
         @keyHandler = {}
         @keyHandler[tvKey.KEY_PLAY] = => @player.play()
+        @keyHandler[tvKey.KEY_PAUSE] = => @player.togglePause()
         @keyHandler[tvKey.KEY_STOP] = => @player.stop()
         @keyHandler[tvKey.KEY_ENTER] = =>
             @player.toggleFullscreen()

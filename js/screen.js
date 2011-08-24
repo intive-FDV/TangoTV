@@ -64,10 +64,12 @@
       if (!event) {
         event = window.event;
       }
+      log.trace("Key " + event.keyCode + " pressed");
       if (typeof this.keyHandler[event.keyCode] === "function") {
-        this.keyHandler[event.keyCode](event);
+        return this.keyHandler[event.keyCode](event);
+      } else {
+        return log.debug("Unhandled key pressed");
       }
-      return log.trace("Key " + event.keyCode + " pressed");
     };
     Screen.prototype.displayNavKey = function(keyRef) {
       return this.navKey = new NavKey(this.fakeBodySelector, keyRef);

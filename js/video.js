@@ -44,18 +44,20 @@
       return log.debug("Video player positioned in (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
     };
     VideoPlayer.prototype.toggleFullscreen = function() {
-      var wasPlaying;
-      wasPlaying = this.status === PLAYING;
-      if (wasPlaying) {
-        this.stop();
-      }
+      this.pause();
       this.fullscreen = !this.fullscreen;
       this.position(this.getCurrentDimensions());
-      if (wasPlaying) {
-        this.play();
+      this.resume();
+      return log.debug("Video fullscreen " + (this.fullscreen ? "on" : "off"));
+    };
+    VideoPlayer.prototype.togglePause = function() {
+      if (this.status === PAUSED) {
+        return this.resume();
+      } else if (this.status === PLAYING) {
+        return this.pause();
+      } else {
+        return log.info("togglePause(): Not playing, ignoring");
       }
-      log.debug("Video fullscreen " + (this.fullscreen ? "on" : "off"));
-      return log.debug("Was" + (wasPlaying ? "" : "n't") + " playing when fullscreen toggled");
     };
     VideoPlayer.prototype.play = function() {
       if (this.cfg.url === null) {
@@ -65,6 +67,23 @@
       this.plugin.Play(this.cfg.url);
       this.status = PLAYING;
       return log.info("Playing video " + this.cfg.url);
+    };
+    VideoPlayer.prototype.pause = function() {
+      if (this.status !== PLAYING) {
+        log.warn("pause(): Not playing, ignoring");
+        return;
+      }
+      this.plugin.Pause();
+      this.status = PAUSED;
+      return log.info("Video playback paused");
+    };
+    VideoPlayer.prototype.resume = function() {
+      if (this.status !== PAUSED) {
+        log.warn("resume(): Not paused, ignoring");
+      }
+      this.plugin.Resume();
+      this.status = PLAYING;
+      return log.info("Video playback resumed");
     };
     VideoPlayer.prototype.stop = function() {
       if (this.status === STOPPED) {
@@ -83,7 +102,7 @@
         log.error("Player plugin not found in page");
         return;
       }
-      TVApp.video = {
+      TVApp.__video = {
         setCurTime: __bind(function() {
           return this.setCurTime(arguments);
         }, this),
@@ -100,14 +119,17 @@
           return this.onBufferingComplete(arguments);
         }, this)
       };
-      this.plugin.OnCurrentPlayTime = "TVApp.__video.setCurTime";
+      TVApp.setCurTime = __bind(function() {
+        return this.setCurTime(arguments);
+      }, this);
+      this.plugin.OnCurrentPlayTime = "TVApp.setCurTime";
       this.plugin.OnStreamInfoReady = "TVApp.__video.setTotalTime";
       this.plugin.OnBufferingStart = "TVApp.__video.onBufferingStart";
       this.plugin.OnBufferingProgress = "TVApp.__video.onBufferingProgress";
       this.plugin.OnBufferingComplete = "TVApp.__video.onBufferingComplete";
     }
     VideoPlayer.prototype.setCurTime = function(time) {
-      return log.trace("Current time: " + time);
+      return log.debug("Current time: " + time);
     };
     VideoPlayer.prototype.setTotalTime = function(time) {
       return log.debug("Total time: " + time);
@@ -142,7 +164,7 @@
     return log.trace("popupNetworkErr");
   };
   window.setCurTime = function(time) {
-    return log.trace("setCurTime " + time);
+    return log.debug("setCurTime " + time);
   };
   window.setTottalTime = function(time) {
     return log.trace("setTottalTime " + time);
