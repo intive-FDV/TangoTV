@@ -1,5 +1,6 @@
 $pageWidth: 960px
 $pageHeight: 540px
+$navKeyHeight: 34px
 
 $gray: #aaa
 $lightGray: #d3d3d3
@@ -39,7 +40,7 @@ $titleHeight: 64px
 
 $menuWidth: 150px
 $mainWidth: $pageWidth - $menuWidth
-$mainHeight: $pageHeight - $titleHeight
+$mainHeight: $pageHeight - $titleHeight - $navKeyHeight
 .content
     position: relative
     width: $pageWidth
@@ -128,7 +129,7 @@ $mainHeight: $pageHeight - $titleHeight
     left: 0
     bottom: 0
     width: $pageWidth
-    height: 34px
+    height: $navKeyHeight
     background: #888
     color: white
     z-index: $topmost

@@ -24,7 +24,7 @@
       return this.mainElem.show();
     };
     NavKey.prototype.hide = function() {
-      return this.mainElem.show();
+      return this.mainElem.hide();
     };
     NavKey.prototype.showKey = function(key, description) {
       var $keyHelper;
@@ -44,15 +44,17 @@
       this.fakeBodySelector = fakeBodySelector;
     }
     Screen.prototype.onLoad = function() {
-      log.debug("App.onLoad");
+      this.enableKeys("keyListener");
       this.widgetAPI.sendReadyEvent();
-      return this.enableKeys("keyListener");
+      return log.debug("Screen base loaded");
     };
     Screen.prototype.keyHandler = {};
     Screen.prototype.setKeyHandler = function(handler) {
       this.keyHandler = handler;
       if ((handler != null ? handler.keyRef : void 0) != null) {
         return this.displayNavKey(handler.keyRef);
+      } else {
+        return this.hideNavKey();
       }
     };
     Screen.prototype.enableKeys = function(listenerId) {
@@ -69,6 +71,10 @@
     };
     Screen.prototype.displayNavKey = function(keyRef) {
       return this.navKey = new NavKey(this.fakeBodySelector, keyRef);
+    };
+    Screen.prototype.hideNavKey = function() {
+      var _ref;
+      return (_ref = this.navKey) != null ? _ref.hide() : void 0;
     };
     Screen.prototype.loadPage = function(uri) {
       return document.location = uri;

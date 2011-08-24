@@ -59,12 +59,12 @@ body {
     position: absolute;
     left: 150px;
     width: 810px;
-    height: 476px; }
+    height: 442px; }
 
 .box {
   display: none;
   width: 790px;
-  height: 456px;
+  height: 422px;
   padding: 10px; }
   .box > div {
     display: inline-block;

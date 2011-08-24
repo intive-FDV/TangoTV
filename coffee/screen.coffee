@@ -36,7 +36,7 @@ class NavKey
         @mainElem.show()
 
     hide: ->
-        @mainElem.show()
+        @mainElem.hide()
 
     showKey: (key, description) ->
         $keyHelper = @mainElem.find(".#{KEY_CLASS}#nav-#{key}")
@@ -62,7 +62,10 @@ class Screen
 
     setKeyHandler: (handler) ->
         @keyHandler = handler
-        @displayNavKey handler.keyRef if handler?.keyRef?
+        if handler?.keyRef?
+            @displayNavKey handler.keyRef
+         else
+            @hideNavKey()
 
     # TODO Add listener anchor programmatically
     enableKeys: (listenerId) ->
@@ -70,12 +73,18 @@ class Screen
     
     onKeyDown: (event) ->
         event = window.event if !event
+        log.trace "Key #{event.keyCode} pressed"
         if typeof @keyHandler[event.keyCode] == "function"
             @keyHandler[event.keyCode] event
-        log.trace "Key #{event.keyCode} pressed"
+        else
+            log.debug "Unhandled key pressed"
+
 
     displayNavKey: (keyRef) ->
         @navKey = new NavKey @fakeBodySelector, keyRef
+
+    hideNavKey: ->
+        @navKey?.hide()
 
     loadPage: (uri) ->
         document.location = uri
