@@ -11,9 +11,14 @@
     
         containerSelector: CSS selector for the <ul> element to add <li>'s to
         options: List of menu items, each an object with "html" and "callback" properties
-            html will be the innerHTML of the generated li element,
-            callback is called when the ENTER key is pressed on the remote
-            continuous: wether the
+            html: the innerHTML of the generated li element,
+            callback: function called when the ENTER key is pressed on the remote
+                while the option is selected
+        continuous: wether the first item is selected when going forward from
+            the last element (and the last item when going backwards from the
+            first one) or not
+        selected: index of the initially selected option. Defaults to 0
+        
     
         Currently, the menu items can only be selected through the UP and DOWN keys
     
@@ -37,7 +42,8 @@
       return switchClasses($(items[this.selected]), this.unselectedClass, this.selectedClass);
     };
     Menu.prototype.openSelectedItem = function() {
-      return this.options[this.selected].callback();
+      var _base;
+      return typeof (_base = this.options[this.selected]).callback === "function" ? _base.callback() : void 0;
     };
     function Menu(config) {
       var tvKey, _ref, _ref2;

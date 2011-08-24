@@ -1,11 +1,17 @@
-$topmost: 10000
 $pageWidth: 960px
 $pageHeight: 540px
 
+$gray: #aaa
+$lightGray: #d3d3d3
+
+$topmost: 10000
+
 body
+    opacity: 100%
+    font-family: Georgia, "Nimbus Roman No9 L", serif
+    background: transparent
     margin: 0
     padding: 0
-    background: transparent
 
 .fake-body
     background-color: white
@@ -20,49 +26,95 @@ body
         width: $pageWidth
         height: $pageHeight
 
-.dashboard
-    .box
-        color: #aaa
-        border: 1px black solid
-        padding: 10px
+$titleHeight: 64px
+.title-header
+    font-size: 2.5em
+    font-style: italic
+    text-shadow: white 2px 2px 3px
+    background: $lightGray
+    border-bottom: $gray solid 4px
+    width: $pageWidth - 20px
+    height: 46px
+    padding: ($titleHeight - 50px) 0 0 20px
+
+$menuWidth: 150px
+$mainWidth: $pageWidth - $menuWidth
+$mainHeight: $pageHeight - $titleHeight
+.content
+    position: relative
+    width: $pageWidth
+    height: $pageHeight - $titleHeight
+    .menu
+        font-size: 1.15em
+        font-style: italic
+        list-style: none
         position: absolute
-        width: 720px
-        height: 223px
+        width: $menuWidth - 2px
+        height: $pageHeight - $titleHeight
+        margin: 0
+        border-right: $lightGray solid 2px
+        padding: 0
+        li
+            background: $lightGray
+            text-shadow: white 1px 1px
+            box-shadow: black 0px 0px 5px
+            display: block
+            width: $menuWidth - 20px - 10px
+            margin: 10px
+            border-radius: 4px
+            padding: 5px 0
+            padding-left: 10px
+        .menu-item-selected
+            color: white
+            text-shadow: black 1px 1px
+            background: $gray
 
-    #color-changer
-        left: 120px
-        top: 20px
-
-    #calculator-box
-        left: 120px
-        top: 263px
-
-    .calculator-help
+    .main-content
         position: absolute
-        left: 10px
-        top: 10px
-        width: 350px
-        height: 180px
+        left: 150px
+        width: $mainWidth
+        height: $mainHeight
+
+.box
+    display: none
+    width: $mainWidth - 20px
+    height: $mainHeight - 20px
+    padding: 10px
+    > div
+        display: inline-block
+        float: left
+        vertical-align: top
+
+
+.calculator-help
+    width: 350px
+    height: 100%
 
 #calculator
-    position: absolute
-    left: 360px
-    top: 10px
     width: 350px
-    height: 180px
+    height: 100% // 180px
     /* TODO This is not working, learn how to make an element scrollable
     overflow: scroll
-
     div
-        margin-right: auto
         text-align: right
-
     .calc-line
-        display: block
         width: 100%
+        > *
+            display: inline-block
 
-    .operator
-        display: inline-block
+#video-player
+    background-color: black
+    width: 100%
+    height: 100%
+
+#fullscreen-placeholder
+    background-color: black
+    display: none
+    position: fixed
+    top: 0
+    left: 0
+    width: $pageWidth
+    height: $pageHeight
 
 .operand
     display: inline-block
@@ -125,3 +177,9 @@ body
     #nav-D
         left: $navKeyPad + ($navKeyWidth + $navKeyPad) * 7
         @include key-icon-bg('../resource/images/button_D.png')
+
+// Samsung Player plugin
+.player-plugin
+    width: 0
+    height: 0
+    border: 0

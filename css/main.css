@@ -1,7 +1,9 @@
 body {
+  opacity: 100%;
+  font-family: Georgia, "Nimbus Roman No9 L", serif;
+  background: transparent;
   margin: 0;
-  padding: 0;
-  background: transparent; }
+  padding: 0; }
 
 .fake-body {
   background-color: white;
@@ -15,42 +17,89 @@ body {
   width: 960px;
   height: 540px; }
 
-.dashboard .box {
-  color: #aaaaaa;
-  border: 1px black solid;
-  padding: 10px;
-  position: absolute;
-  width: 720px;
-  height: 223px; }
-.dashboard #color-changer {
-  left: 120px;
-  top: 20px; }
-.dashboard #calculator-box {
-  left: 120px;
-  top: 263px; }
-.dashboard .calculator-help {
-  position: absolute;
-  left: 10px;
-  top: 10px;
+.title-header {
+  font-size: 2.5em;
+  font-style: italic;
+  text-shadow: white 2px 2px 3px;
+  background: #d3d3d3;
+  border-bottom: #aaaaaa solid 4px;
+  width: 940px;
+  height: 46px;
+  padding: 14px 0 0 20px; }
+
+.content {
+  position: relative;
+  width: 960px;
+  height: 476px; }
+  .content .menu {
+    font-size: 1.15em;
+    font-style: italic;
+    list-style: none;
+    position: absolute;
+    width: 148px;
+    height: 476px;
+    margin: 0;
+    border-right: #d3d3d3 solid 2px;
+    padding: 0; }
+    .content .menu li {
+      background: #d3d3d3;
+      text-shadow: white 1px 1px;
+      box-shadow: black 0px 0px 5px;
+      display: block;
+      width: 120px;
+      margin: 10px;
+      border-radius: 4px;
+      padding: 5px 0;
+      padding-left: 10px; }
+    .content .menu .menu-item-selected {
+      color: white;
+      text-shadow: black 1px 1px;
+      background: #aaaaaa; }
+  .content .main-content {
+    position: absolute;
+    left: 150px;
+    width: 810px;
+    height: 476px; }
+
+.box {
+  display: none;
+  width: 790px;
+  height: 456px;
+  padding: 10px; }
+  .box > div {
+    display: inline-block;
+    float: left;
+    vertical-align: top; }
+
+.calculator-help {
   width: 350px;
-  height: 180px; }
+  height: 100%; }
 
 #calculator {
-  position: absolute;
-  left: 360px;
-  top: 10px;
   width: 350px;
-  height: 180px;
+  height: 100%;
   /* TODO This is not working, learn how to make an element scrollable */
   overflow: scroll; }
   #calculator div {
-    margin-right: auto;
     text-align: right; }
   #calculator .calc-line {
-    display: block;
     width: 100%; }
-  #calculator .operator {
-    display: inline-block; }
+    #calculator .calc-line > * {
+      display: inline-block; }
+
+#video-player {
+  background-color: black;
+  width: 100%;
+  height: 100%; }
+
+#fullscreen-placeholder {
+  background-color: black;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 960px;
+  height: 540px; }
 
 .operand {
   display: inline-block; }
@@ -106,3 +155,8 @@ body {
     left: 772px; }
     .nav-key #nav-D .key-icon {
       background: url("../resource/images/button_D.png") left top no-repeat; }
+
+.player-plugin {
+  width: 0;
+  height: 0;
+  border: 0; }

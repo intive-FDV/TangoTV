@@ -54,9 +54,9 @@ class Screen
         @fakeBodySelector = fakeBodySelector
 
     onLoad: ->
-        log.debug "App.onLoad"
-        @widgetAPI.sendReadyEvent()
         @enableKeys("keyListener")
+        @widgetAPI.sendReadyEvent()
+        log.debug "Screen base loaded"
 
     keyHandler: {}
 

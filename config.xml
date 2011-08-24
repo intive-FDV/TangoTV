@@ -16,6 +16,7 @@
 	<childlock itemtype="boolean">n</childlock>
 	<audiomute itemtype="boolean">n</audiomute>
 	<videomute itemtype="boolean">n</videomute>
+    <movie>y</movie>
 	<dcont itemtype="string">y</dcont>
 	<widgetname itemtype="string">app-name</widgetname>
 	<description itemtype="string"></description>

@@ -9,8 +9,11 @@
 		<script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/Widget.js'></script>
 		<script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/TVKeyValue.js'></script>
 
+
         <script type="text/javascript" src="../js/appbase.js"></script>
         <script type="text/javascript" src="../js/screen.js"></script>
+        <script type="text/javascript" src="../js/menu.js"></script>
+        <script type="text/javascript" src="../js/video.js"></script>
         <script type="text/javascript" src="../js/dashboard.js"></script>
         <script type="text/javascript">
             log.level = log.levels.DEBUG;
@@ -18,8 +21,11 @@
             var tvScreen = new TVApp.Dashboard(".fake-body");
         </script>
 
-		<link rel="stylesheet" href="../css/main.css" type="text/css">
-	</head>
+        <link rel="stylesheet" href="../css/main.css" type="text/css">
+
+        <object id="pluginPlayer" classid="clsid:SAMSUNG-INFOLINK-PLAYER" class=".player-plugin"></object>
+        <object id="pluginTVMW" border=0 classid="clsid:SAMSUNG-INFOLINK-TVMW"></object>
+    </head>
 
 	<body class="dashboard" onload="tvScreen.onLoad();">
     
@@ -27,26 +33,47 @@
 		<a href="javascript:void(0);" id="keyListener" onkeydown="tvScreen.onKeyDown();"></a>
 
         <div class="fake-body">
-            <div id="color-changer" class="box">
-                Press color remote keys to change this box's color<br>
-                Press Enter to revert to white
-                Press Down button to switch to the box below
-                This key reference will shortly be in a custom component :)
+
+            <div class="title-header">
+                Samsung Smart TV Showcase
             </div>
-            <div id="calculator-box" class="box">
-                <div class="calculator-help">
-                    Use this box as a simple calculator <br>
-                    Press BLUE to add, RED to substract, <br>
-                    GREEN to multiply and YELLOW to divide <br>
-                    Press Return to clear history
-                </div>
-                <div id="calculator">
-                    <div class="calc-line">
-                        <div class="operator"></div>
-                        <div class="operand"></div>
+            <div class="content">
+                <ul class="menu"></ul>
+                <div class="main-content">
+                    <div id="color-changer" class="box">
+                        Press color remote keys to change this box's color<br>
+                        Press Enter to revert to white
+                        Press Down button to switch to the box below
+                        This key reference will shortly be in a custom component :)
+                    </div>
+                    <div id="calculator-box" class="box">
+                        <div class="calculator-help">
+                            Use this box as a simple calculator <br>
+                            Press BLUE to add, RED to substract, <br>
+                            GREEN to multiply and YELLOW to divide <br>
+                            Press rewind (<<) to clear history
+                        </div>
+                        <div id="calculator">
+                            <div class="calc-line">
+                                <div class="operator"></div>
+                                <div class="operand"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="html5-video-container" class="box">
+                        <video id="html5-video" width="100%" height="100%"
+                                src="http://double.co.nz/video_test/transformers480.ogg">
+                            Your browser does not support the video tag
+                        </video>
+                    </div>
+                    <div id="video-container" class="box">
+                        <div id="video-player"></div>
+                        <div id="fullscreen-placeholder"></div>
                     </div>
                 </div>
             </div>
+
+
         </div>
 
 	</body>
