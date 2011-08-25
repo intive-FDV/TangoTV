@@ -61,6 +61,10 @@ class Menu
         @keyHandler[tvKey.KEY_ENTER] = =>
             @openSelectedItem()
 
+        @keyHandler.keyRef =
+            "enter": "Select"
+            "up-down": "Move"
+
         @createItems()
 
     offset: (amount) ->

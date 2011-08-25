@@ -70,6 +70,10 @@
       this.keyHandler[tvKey.KEY_ENTER] = __bind(function() {
         return this.openSelectedItem();
       }, this);
+      this.keyHandler.keyRef = {
+        "enter": "Select",
+        "up-down": "Move"
+      };
       this.createItems();
     }
     Menu.prototype.offset = function(amount) {

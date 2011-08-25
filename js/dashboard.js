@@ -37,16 +37,16 @@
       tvKey = new Common.API.TVKeyValue();
       this.keyHandler = {};
       this.keyHandler[tvKey.KEY_RED] = __bind(function() {
-        return this.setColor("red");
+        return this.setColor("#a90921");
       }, this);
       this.keyHandler[tvKey.KEY_GREEN] = __bind(function() {
-        return this.setColor("green");
+        return this.setColor("#418415");
       }, this);
       this.keyHandler[tvKey.KEY_YELLOW] = __bind(function() {
-        return this.setColor("yellow");
+        return this.setColor("#d6ab00");
       }, this);
       this.keyHandler[tvKey.KEY_BLUE] = __bind(function() {
-        return this.setColor("blue");
+        return this.setColor("#09418f");
       }, this);
       this.keyHandler[tvKey.KEY_ENTER] = __bind(function() {
         return this.setColor("white");

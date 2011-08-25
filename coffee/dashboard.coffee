@@ -17,16 +17,16 @@ class ColorChanger extends HiddableContent
         @keyHandler = {}
         
         @keyHandler[tvKey.KEY_RED] = =>
-            @setColor "red"
+            @setColor "#a90921"
 
         @keyHandler[tvKey.KEY_GREEN] = =>
-            @setColor "green"
+            @setColor "#418415"
 
         @keyHandler[tvKey.KEY_YELLOW] = =>
-            @setColor "yellow"
+            @setColor "#d6ab00"
 
         @keyHandler[tvKey.KEY_BLUE] = =>
-            @setColor "blue"
+            @setColor "#09418f"
 
         @keyHandler[tvKey.KEY_ENTER] = =>
             @setColor "white"
