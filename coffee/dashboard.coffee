@@ -32,7 +32,6 @@ class ColorChanger extends HiddableContent
             @setColor "white"
 
         @keyHandler.keyRef =
-            "return": "Menu"
             "enter": "White"
             "A": "Red"
             "B": "Green"
@@ -127,6 +126,13 @@ class Calculator extends HiddableContent
         @keyHandler[tvKey.KEY_RW] = =>
             @clearHistory()
 
+        @keyHandler.keyRef =
+            "enter": "Calculate"
+            "A": "Substract"
+            "B": "Multiply"
+            "C": "Divide"
+            "D": "Add"
+
 class Html5VideoPlayer extends HiddableContent
 
     getContainer: -> @container
@@ -211,14 +217,18 @@ class Dashboard extends TVApp.Screen
 
         focusOnMenu = => @setKeyHandler @menu.keyHandler
 
+        addMenuButton = (keyHandler) =>
+            keyHandler[@tvKey.KEY_RETURN] = focusOnMenu
+            keyHandler.keyRef.return = "Menu" if keyHandler.keyRef?
+
         @colorChanger = new ColorChanger("#color-changer")
-        @colorChanger.keyHandler[@tvKey.KEY_RETURN] = focusOnMenu
+        addMenuButton(@colorChanger.keyHandler)
 
         @calculator = new Calculator("#calculator-box", "#calculator")
-        @calculator.keyHandler[@tvKey.KEY_RETURN] = focusOnMenu
+        addMenuButton(@calculator.keyHandler)
 
         @html5Player = new Html5VideoPlayer("#html5-video-container", "#html5-video")
-        @html5Player.keyHandler[@tvKey.KEY_RETURN] = focusOnMenu
+        addMenuButton(@html5Player.keyHandler)
 
         @videoPlayer = new Video(
             containerSelector: "#video-container"
@@ -227,7 +237,7 @@ class Dashboard extends TVApp.Screen
             playerConfig:
                 url: "D:/Workspaces/samsung-tv/app-template/resource/video/movie.mp4"
         )
-        @videoPlayer.keyHandler[@tvKey.KEY_RETURN] = focusOnMenu
+        addMenuButton(@videoPlayer.keyHandler)
 
         focusOnMenu()
 

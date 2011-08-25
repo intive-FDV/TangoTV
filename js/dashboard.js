@@ -52,7 +52,6 @@
         return this.setColor("white");
       }, this);
       this.keyHandler.keyRef = {
-        "return": "Menu",
         "enter": "White",
         "A": "Red",
         "B": "Green",
@@ -160,6 +159,13 @@
       this.keyHandler[tvKey.KEY_RW] = __bind(function() {
         return this.clearHistory();
       }, this);
+      this.keyHandler.keyRef = {
+        "enter": "Calculate",
+        "A": "Substract",
+        "B": "Multiply",
+        "C": "Divide",
+        "D": "Add"
+      };
     }
     return Calculator;
   })();
@@ -245,7 +251,7 @@
       return this.setKeyHandler(content.keyHandler);
     };
     Dashboard.prototype.onLoad = function() {
-      var focusOnMenu;
+      var addMenuButton, focusOnMenu;
       log.debug("Dashboard.onLoad");
       Dashboard.__super__.onLoad.call(this);
       this.menu = new TVApp.Menu({
@@ -272,12 +278,18 @@
       focusOnMenu = __bind(function() {
         return this.setKeyHandler(this.menu.keyHandler);
       }, this);
+      addMenuButton = __bind(function(keyHandler) {
+        keyHandler[this.tvKey.KEY_RETURN] = focusOnMenu;
+        if (keyHandler.keyRef != null) {
+          return keyHandler.keyRef["return"] = "Menu";
+        }
+      }, this);
       this.colorChanger = new ColorChanger("#color-changer");
-      this.colorChanger.keyHandler[this.tvKey.KEY_RETURN] = focusOnMenu;
+      addMenuButton(this.colorChanger.keyHandler);
       this.calculator = new Calculator("#calculator-box", "#calculator");
-      this.calculator.keyHandler[this.tvKey.KEY_RETURN] = focusOnMenu;
+      addMenuButton(this.calculator.keyHandler);
       this.html5Player = new Html5VideoPlayer("#html5-video-container", "#html5-video");
-      this.html5Player.keyHandler[this.tvKey.KEY_RETURN] = focusOnMenu;
+      addMenuButton(this.html5Player.keyHandler);
       this.videoPlayer = new Video({
         containerSelector: "#video-container",
         placeholderSelector: "#video-player",
@@ -286,7 +298,7 @@
           url: "D:/Workspaces/samsung-tv/app-template/resource/video/movie.mp4"
         }
       });
-      this.videoPlayer.keyHandler[this.tvKey.KEY_RETURN] = focusOnMenu;
+      addMenuButton(this.videoPlayer.keyHandler);
       return focusOnMenu();
     };
     return Dashboard;

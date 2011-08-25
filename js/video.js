@@ -104,6 +104,7 @@
       }
       TVApp.__video = {
         setCurTime: __bind(function() {
+          log.debug("Current time in TVApp.__video: " + arguments[0]);
           return this.setCurTime(arguments);
         }, this),
         setTotalTime: __bind(function() {
@@ -122,7 +123,7 @@
       TVApp.setCurTime = __bind(function() {
         return this.setCurTime(arguments);
       }, this);
-      this.plugin.OnCurrentPlayTime = "TVApp.setCurTime";
+      this.plugin.OnCurrentPlayTime = "TVApp.__video.setCurTime";
       this.plugin.OnStreamInfoReady = "TVApp.__video.setTotalTime";
       this.plugin.OnBufferingStart = "TVApp.__video.onBufferingStart";
       this.plugin.OnBufferingProgress = "TVApp.__video.onBufferingProgress";
