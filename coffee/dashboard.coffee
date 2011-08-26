@@ -40,64 +40,88 @@ class ColorChanger extends HiddableContent
 
 
 class Calculator extends HiddableContent
+    DISPLAY_CLASS: "display"
+    HISTORY_CLASS: "history"
     LINE_CLASS: "calc-line"
     OPERATOR_CLASS: "operator"
     OPERAND_CLASS: "operand"
+    currentOperand: 0
     value: 0
 
     getContainer: -> @container
 
-    show: -> @container.show()
-
-    noop: -> @parseValue()
+    noop: ->
+        @parseDisplay()
     sum: (x, y) -> x + y
     subtraction: (x, y) -> x - y
     multiplication: (x, y) -> x * y
     division: (x, y) -> x / y
 
     performOp: ->
-        @value = @op @value, @parseValue()
+        @value = @op @value, @parseDisplay()
 
     addLine: ->
-        @element.append $("""
+        @history.prepend $("""
             <div class="#{@LINE_CLASS}">
+                <div class="#{@OPERAND_CLASS}"></div>
                 <div class="#{@OPERATOR_CLASS}"></div>
                 <div class="#{@OPERAND_CLASS}"></div>
             </div>
         """)
 
     appendToOperand: (str) ->
-        $currentOperand = @element.find(".#{@OPERAND_CLASS}:last")[0]
-        $currentOperand.innerHTML = "#{$currentOperand.innerHTML}#{str}"
+        @display.html("#{@display.html()}#{str}")
+        # $currentOperand = @element.find(".#{@OPERAND_CLASS}:last")[0]
+        # $currentOperand.innerHTML = "#{$currentOperand.innerHTML}#{str}"
 
     showValue: ->
-        $currentOperand = @element.find(".#{@OPERAND_CLASS}:last")[0]
-        $currentOperand.innerHTML = String(@value)
+        @display.html(String(@value))
+        # $currentOperand = @element.find(".#{@OPERAND_CLASS}:last")[0]
+        # $currentOperand.innerHTML = String(@value)
 
-    parseValue: ->
-        (+ @element.find("div:last")[0].innerHTML)
+    parseDisplay: ->
+        (+ @display.html())
+
+    acceptOperand: (value) ->
+        suffix = ":first"
+        suffix = ":last" unless @currentOperand == 0
+        @history.find(".#{@LINE_CLASS}:first .#{@OPERAND_CLASS}#{suffix}").html(value)
+        @currentOperand = (@currentOperand + 1) % 2
+        log.debug "Calc: Accepted #{value} as #{suffix} operand"
+
+    clearDisplay: ->
+        @display.html("")
 
     showOperator: (operator) ->
-        $currentOperator = @element.find(".#{@OPERATOR_CLASS}:last")[0]
-        $currentOperator.innerHTML = "#{operator} "
+        @history.find(".#{@OPERATOR_CLASS}:first").html("#{operator}")
+
+    showResult: ->
+        @history.find(".#{@LINE_CLASS}:first .#{@OPERAND_CLASS}:first").html(@value)
 
     clearHistory: ->
-        @element.html("")
+        @history.html("")
+        @display.html("")
         @addLine()
         @value = 0
+        @currentOperand = 0
         @op = @noop
-    
+        log.debug "Calc: History clear"
+
     calculateAndSetOperation: (operation, symbol) ->
         @performOp()
-        @addLine()
-        @showValue()
-        @addLine()
-        @op = operation
+        if @currentOperand == 1
+            @acceptOperand(@display.html())
+            @addLine()
+        @acceptOperand(@value)
         @showOperator symbol # TODO Could be part of the operation
+        @clearDisplay()
+        @op = operation
 
     constructor: (containerSelector, elementSelector) ->
         @container = $(containerSelector)
         @element = $(elementSelector)
+        @display = @element.find(".#{@DISPLAY_CLASS}")
+        @history = @element.find(".#{@HISTORY_CLASS}")
         @op = @noop
 
         tvKey = new Common.API.TVKeyValue()
@@ -122,6 +146,7 @@ class Calculator extends HiddableContent
             do (num) =>
                 @keyHandler[tvKey["KEY_#{num}"]] = =>
                     @appendToOperand "#{num}"
+                    log.trace "Calc: Appended #{num}"
 
         @keyHandler[tvKey.KEY_RW] = =>
             @clearHistory()
@@ -194,9 +219,6 @@ class Dashboard extends TVApp.Screen
         @setKeyHandler content.keyHandler
 
     onLoad: ->
-        log.debug "Dashboard.onLoad"
-        super()
-        
         @menu = new TVApp.Menu(
             containerSelector: '.menu'
             options: [
@@ -215,20 +237,18 @@ class Dashboard extends TVApp.Screen
             ]
         )
 
-        focusOnMenu = => @setKeyHandler @menu.keyHandler
-
-        addMenuButton = (keyHandler) =>
-            keyHandler[@tvKey.KEY_RETURN] = focusOnMenu
+        addReturnKey = (keyHandler) =>
+            keyHandler[@tvKey.KEY_RETURN] = => @setKeyHandler @menu.keyHandler
             keyHandler.keyRef.return = "Menu" if keyHandler.keyRef?
 
         @colorChanger = new ColorChanger("#color-changer")
-        addMenuButton(@colorChanger.keyHandler)
+        addReturnKey(@colorChanger.keyHandler)
 
         @calculator = new Calculator("#calculator-box", "#calculator")
-        addMenuButton(@calculator.keyHandler)
+        addReturnKey(@calculator.keyHandler)
 
         @html5Player = new Html5VideoPlayer("#html5-video-container", "#html5-video")
-        addMenuButton(@html5Player.keyHandler)
+        addReturnKey(@html5Player.keyHandler)
 
         @videoPlayer = new Video(
             containerSelector: "#video-container"
@@ -237,8 +257,11 @@ class Dashboard extends TVApp.Screen
             playerConfig:
                 url: "D:/Workspaces/samsung-tv/app-template/resource/video/movie.mp4"
         )
-        addMenuButton(@videoPlayer.keyHandler)
+        addReturnKey(@videoPlayer.keyHandler)
 
-        focusOnMenu()
+        @setKeyHandler @menu.keyHandler
+
+        log.debug "Dashboard loaded"
+        super()
 
 TVApp.Dashboard = Dashboard

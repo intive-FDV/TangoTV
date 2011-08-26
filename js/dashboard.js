@@ -63,18 +63,18 @@
   })();
   Calculator = (function() {
     __extends(Calculator, HiddableContent);
+    Calculator.prototype.DISPLAY_CLASS = "display";
+    Calculator.prototype.HISTORY_CLASS = "history";
     Calculator.prototype.LINE_CLASS = "calc-line";
     Calculator.prototype.OPERATOR_CLASS = "operator";
     Calculator.prototype.OPERAND_CLASS = "operand";
+    Calculator.prototype.currentOperand = 0;
     Calculator.prototype.value = 0;
     Calculator.prototype.getContainer = function() {
       return this.container;
     };
-    Calculator.prototype.show = function() {
-      return this.container.show();
-    };
     Calculator.prototype.noop = function() {
-      return this.parseValue();
+      return this.parseDisplay();
     };
     Calculator.prototype.sum = function(x, y) {
       return x + y;
@@ -89,47 +89,65 @@
       return x / y;
     };
     Calculator.prototype.performOp = function() {
-      return this.value = this.op(this.value, this.parseValue());
+      return this.value = this.op(this.value, this.parseDisplay());
     };
     Calculator.prototype.addLine = function() {
-      return this.element.append($("<div class=\"" + this.LINE_CLASS + "\">\n    <div class=\"" + this.OPERATOR_CLASS + "\"></div>\n    <div class=\"" + this.OPERAND_CLASS + "\"></div>\n</div>"));
+      return this.history.prepend($("<div class=\"" + this.LINE_CLASS + "\">\n    <div class=\"" + this.OPERAND_CLASS + "\"></div>\n    <div class=\"" + this.OPERATOR_CLASS + "\"></div>\n    <div class=\"" + this.OPERAND_CLASS + "\"></div>\n</div>"));
     };
     Calculator.prototype.appendToOperand = function(str) {
-      var $currentOperand;
-      $currentOperand = this.element.find("." + this.OPERAND_CLASS + ":last")[0];
-      return $currentOperand.innerHTML = "" + $currentOperand.innerHTML + str;
+      return this.display.html("" + (this.display.html()) + str);
     };
     Calculator.prototype.showValue = function() {
-      var $currentOperand;
-      $currentOperand = this.element.find("." + this.OPERAND_CLASS + ":last")[0];
-      return $currentOperand.innerHTML = String(this.value);
+      return this.display.html(String(this.value));
     };
-    Calculator.prototype.parseValue = function() {
-      return +this.element.find("div:last")[0].innerHTML;
+    Calculator.prototype.parseDisplay = function() {
+      return +this.display.html();
+    };
+    Calculator.prototype.acceptOperand = function(value) {
+      var suffix;
+      suffix = ":first";
+      if (this.currentOperand !== 0) {
+        suffix = ":last";
+      }
+      this.history.find("." + this.LINE_CLASS + ":first ." + this.OPERAND_CLASS + suffix).html(value);
+      this.currentOperand = (this.currentOperand + 1) % 2;
+      return log.debug("Calc: Accepted " + value + " as " + suffix + " operand");
+    };
+    Calculator.prototype.clearDisplay = function() {
+      return this.display.html("");
     };
     Calculator.prototype.showOperator = function(operator) {
-      var $currentOperator;
-      $currentOperator = this.element.find("." + this.OPERATOR_CLASS + ":last")[0];
-      return $currentOperator.innerHTML = "" + operator + " ";
+      return this.history.find("." + this.OPERATOR_CLASS + ":first").html("" + operator);
+    };
+    Calculator.prototype.showResult = function() {
+      return this.history.find("." + this.LINE_CLASS + ":first ." + this.OPERAND_CLASS + ":first").html(this.value);
     };
     Calculator.prototype.clearHistory = function() {
-      this.element.html("");
+      this.history.html("");
+      this.display.html("");
       this.addLine();
       this.value = 0;
-      return this.op = this.noop;
+      this.currentOperand = 0;
+      this.op = this.noop;
+      return log.debug("Calc: History clear");
     };
     Calculator.prototype.calculateAndSetOperation = function(operation, symbol) {
       this.performOp();
-      this.addLine();
-      this.showValue();
-      this.addLine();
-      this.op = operation;
-      return this.showOperator(symbol);
+      this.acceptOperand(this.display.html());
+      if (this.currentOperand === 0) {
+        this.addLine();
+      }
+      this.acceptOperand(this.value);
+      this.showOperator(symbol);
+      this.clearDisplay();
+      return this.op = operation;
     };
     function Calculator(containerSelector, elementSelector) {
       var num, tvKey, _fn;
       this.container = $(containerSelector);
       this.element = $(elementSelector);
+      this.display = this.element.find("." + this.DISPLAY_CLASS);
+      this.history = this.element.find("." + this.HISTORY_CLASS);
       this.op = this.noop;
       tvKey = new Common.API.TVKeyValue();
       this.keyHandler = {};
@@ -150,7 +168,8 @@
       }, this);
       _fn = __bind(function(num) {
         return this.keyHandler[tvKey["KEY_" + num]] = __bind(function() {
-          return this.appendToOperand("" + num);
+          this.appendToOperand("" + num);
+          return log.trace("Calc: Appended " + num);
         }, this);
       }, this);
       for (num = 0; num <= 9; num++) {
@@ -251,9 +270,7 @@
       return this.setKeyHandler(content.keyHandler);
     };
     Dashboard.prototype.onLoad = function() {
-      var addMenuButton, focusOnMenu;
-      log.debug("Dashboard.onLoad");
-      Dashboard.__super__.onLoad.call(this);
+      var addReturnKey;
       this.menu = new TVApp.Menu({
         containerSelector: '.menu',
         options: [
@@ -275,21 +292,20 @@
           }
         ]
       });
-      focusOnMenu = __bind(function() {
-        return this.setKeyHandler(this.menu.keyHandler);
-      }, this);
-      addMenuButton = __bind(function(keyHandler) {
-        keyHandler[this.tvKey.KEY_RETURN] = focusOnMenu;
+      addReturnKey = __bind(function(keyHandler) {
+        keyHandler[this.tvKey.KEY_RETURN] = __bind(function() {
+          return this.setKeyHandler(this.menu.keyHandler);
+        }, this);
         if (keyHandler.keyRef != null) {
           return keyHandler.keyRef["return"] = "Menu";
         }
       }, this);
       this.colorChanger = new ColorChanger("#color-changer");
-      addMenuButton(this.colorChanger.keyHandler);
+      addReturnKey(this.colorChanger.keyHandler);
       this.calculator = new Calculator("#calculator-box", "#calculator");
-      addMenuButton(this.calculator.keyHandler);
+      addReturnKey(this.calculator.keyHandler);
       this.html5Player = new Html5VideoPlayer("#html5-video-container", "#html5-video");
-      addMenuButton(this.html5Player.keyHandler);
+      addReturnKey(this.html5Player.keyHandler);
       this.videoPlayer = new Video({
         containerSelector: "#video-container",
         placeholderSelector: "#video-player",
@@ -298,8 +314,10 @@
           url: "D:/Workspaces/samsung-tv/app-template/resource/video/movie.mp4"
         }
       });
-      addMenuButton(this.videoPlayer.keyHandler);
-      return focusOnMenu();
+      addReturnKey(this.videoPlayer.keyHandler);
+      this.setKeyHandler(this.menu.keyHandler);
+      log.debug("Dashboard loaded");
+      return Dashboard.__super__.onLoad.call(this);
     };
     return Dashboard;
   })();

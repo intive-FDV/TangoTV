@@ -81,11 +81,17 @@ body {
   /* TODO This is not working, learn how to make an element scrollable */
   overflow: scroll; }
   #calculator div {
-    text-align: right; }
+    text-align: right;
+    width: 100%; }
+  #calculator .display {
+    height: 1em;
+    border-bottom: black 1px solid; }
   #calculator .calc-line {
     width: 100%; }
-    #calculator .calc-line > * {
-      display: inline-block; }
+    #calculator .calc-line div {
+      display: inline; }
+    #calculator .calc-line .operator {
+      padding: 0 3px; }
 
 #video-player {
   background-color: black;
@@ -100,9 +106,6 @@ body {
   left: 0;
   width: 960px;
   height: 540px; }
-
-.operand {
-  display: inline-block; }
 
 .nav-key {
   position: absolute;
