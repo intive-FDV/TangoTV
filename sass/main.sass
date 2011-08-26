@@ -98,10 +98,18 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
     overflow: scroll
     div
         text-align: right
+        width: 100%
+    //.operand
+    //    display: inline-block
+    .display
+        height: 1em
+        border-bottom: black 1px solid
     .calc-line
         width: 100%
-        > *
-            display: inline-block
+        div
+            display: inline
+        .operator
+            padding: 0 3px
 
 #video-player
     background-color: black
@@ -116,9 +124,6 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
     left: 0
     width: $pageWidth
     height: $pageHeight
-
-.operand
-    display: inline-block
 
 @mixin key-icon-bg($imgUrl)
     .key-icon
