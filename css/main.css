@@ -49,12 +49,14 @@ body {
       width: 120px;
       margin: 10px;
       border-radius: 4px;
-      padding: 5px 0;
-      padding-left: 10px; }
+      padding: 5px 1px 5px 10px; }
     .content .menu .menu-item-selected {
       color: white;
       text-shadow: black 1px 1px;
       background: #aaaaaa; }
+    .content .menu .menu-item-open {
+      padding: 4px 0px 4px 9px;
+      border: 1px solid red; }
   .content .main-content {
     position: absolute;
     left: 150px;

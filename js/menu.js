@@ -25,6 +25,7 @@
         The keyHandler can be publicly accesed in order to override/add behaviour
         */    Menu.prototype.selected = 0;
     Menu.prototype.focusedClass = "menu-focused";
+    Menu.prototype.openClass = "menu-item-open";
     Menu.prototype.selectedClass = "menu-item-selected";
     Menu.prototype.unselectedClass = "menu-item-unselected";
     Menu.prototype.createItems = function() {
@@ -33,17 +34,18 @@
       for (index = 0, _ref = this.options.length; 0 <= _ref ? index < _ref : index > _ref; 0 <= _ref ? index++ : index--) {
         this.container.append($("<li class=\"" + this.unselectedClass + " " + evenness[index % 2] + "\">" + this.options[index].html + "</li>"));
       }
+      this.items = this.container.find("li");
       return this.selectItem(this.selected);
     };
     Menu.prototype.selectItem = function(index) {
-      var items;
-      items = this.container.find("li");
-      switchClasses($(items[this.selected]), this.selectedClass, this.unselectedClass);
+      switchClasses($(this.items[this.selected]), this.selectedClass, this.unselectedClass);
       this.selected = index;
-      return switchClasses($(items[this.selected]), this.unselectedClass, this.selectedClass);
+      return switchClasses($(this.items[this.selected]), this.unselectedClass, this.selectedClass);
     };
     Menu.prototype.openSelectedItem = function() {
       var _base;
+      this.container.find("." + this.openClass).removeClass(this.openClass);
+      $(this.items[this.selected]).addClass(this.openClass);
       return typeof (_base = this.options[this.selected]).callback === "function" ? _base.callback() : void 0;
     };
     function Menu(config) {
@@ -62,12 +64,10 @@
       }
       this.keyHandler = {
         focus: __bind(function() {
-          this.container.addClass(this.focusedClass);
-          return log.debug("Class " + this.focusedClass + " added to menu container");
+          return this.container.addClass(this.focusedClass);
         }, this),
         stealFocus: __bind(function() {
-          this.container.removeClass(this.focusedClass);
-          return log.debug("Class " + this.focusedClass + " removed from menu container");
+          return this.container.removeClass(this.focusedClass);
         }, this)
       };
       tvKey = new Common.API.TVKeyValue();

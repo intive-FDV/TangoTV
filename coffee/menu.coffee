@@ -23,6 +23,7 @@ class Menu
     ###
     selected: 0
     focusedClass: "menu-focused"
+    openClass: "menu-item-open"
     selectedClass: "menu-item-selected"
     unselectedClass: "menu-item-unselected"
 
@@ -30,15 +31,17 @@ class Menu
         evenness = ["odd", "even"]
         for index in [0 ... @options.length]
             @container.append $("<li class=\"#{@unselectedClass} #{evenness[index % 2]}\">#{@options[index].html}</li>")
-        @selectItem @selected
+        @items = @container.find("li")
+        @selectItem(@selected)
 
     selectItem: (index) ->
-        items = @container.find("li")
-        switchClasses $(items[@selected]), @selectedClass, @unselectedClass
+        switchClasses $(@items[@selected]), @selectedClass, @unselectedClass
         @selected = index
-        switchClasses $(items[@selected]), @unselectedClass, @selectedClass
+        switchClasses $(@items[@selected]), @unselectedClass, @selectedClass
 
     openSelectedItem: ->
+        @container.find(".#{@openClass}").removeClass(@openClass)
+        $(@items[@selected]).addClass(@openClass)
         @options[@selected].callback?()
 
     constructor: (config) ->
@@ -52,14 +55,12 @@ class Menu
             @preFirst = 0
             @postLast = config.options?.length - 1
 
-        # TODO Make key codes configurable (or at least horizontal)
+        # TODO Make key codes configurable (or at least give horizontal alternative)
         @keyHandler =
             focus: =>
                 @container.addClass @focusedClass
-                log.debug "Class #{@focusedClass} added to menu container"
             stealFocus: =>
                 @container.removeClass @focusedClass
-                log.debug "Class #{@focusedClass} removed from menu container"
 
         tvKey = new Common.API.TVKeyValue()
         @keyHandler[tvKey.KEY_UP] = =>
