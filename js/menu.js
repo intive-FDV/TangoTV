@@ -24,6 +24,7 @@
     
         The keyHandler can be publicly accesed in order to override/add behaviour
         */    Menu.prototype.selected = 0;
+    Menu.prototype.focusedClass = "menu-focused";
     Menu.prototype.selectedClass = "menu-item-selected";
     Menu.prototype.unselectedClass = "menu-item-unselected";
     Menu.prototype.createItems = function() {
@@ -59,8 +60,17 @@
         this.preFirst = 0;
         this.postLast = ((_ref2 = config.options) != null ? _ref2.length : void 0) - 1;
       }
+      this.keyHandler = {
+        focus: __bind(function() {
+          this.container.addClass(this.focusedClass);
+          return log.debug("Class " + this.focusedClass + " added to menu container");
+        }, this),
+        stealFocus: __bind(function() {
+          this.container.removeClass(this.focusedClass);
+          return log.debug("Class " + this.focusedClass + " removed from menu container");
+        }, this)
+      };
       tvKey = new Common.API.TVKeyValue();
-      this.keyHandler = {};
       this.keyHandler[tvKey.KEY_UP] = __bind(function() {
         return this.offset(-1);
       }, this);

@@ -61,7 +61,9 @@ class Screen
     keyHandler: {}
 
     setKeyHandler: (handler) ->
+        @keyHandler?.stealFocus?()
         @keyHandler = handler
+        @keyHandler?.focus?()
         if handler?.keyRef?
             @displayNavKey handler.keyRef
          else

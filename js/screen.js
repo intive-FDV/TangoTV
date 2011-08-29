@@ -50,7 +50,18 @@
     };
     Screen.prototype.keyHandler = {};
     Screen.prototype.setKeyHandler = function(handler) {
+      var _ref, _ref2;
+      if ((_ref = this.keyHandler) != null) {
+        if (typeof _ref.stealFocus === "function") {
+          _ref.stealFocus();
+        }
+      }
       this.keyHandler = handler;
+      if ((_ref2 = this.keyHandler) != null) {
+        if (typeof _ref2.focus === "function") {
+          _ref2.focus();
+        }
+      }
       if ((handler != null ? handler.keyRef : void 0) != null) {
         return this.displayNavKey(handler.keyRef);
       } else {

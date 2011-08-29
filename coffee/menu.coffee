@@ -22,6 +22,7 @@ class Menu
     The keyHandler can be publicly accesed in order to override/add behaviour
     ###
     selected: 0
+    focusedClass: "menu-focused"
     selectedClass: "menu-item-selected"
     unselectedClass: "menu-item-unselected"
 
@@ -52,8 +53,15 @@ class Menu
             @postLast = config.options?.length - 1
 
         # TODO Make key codes configurable (or at least horizontal)
+        @keyHandler =
+            focus: =>
+                @container.addClass @focusedClass
+                log.debug "Class #{@focusedClass} added to menu container"
+            stealFocus: =>
+                @container.removeClass @focusedClass
+                log.debug "Class #{@focusedClass} removed from menu container"
+
         tvKey = new Common.API.TVKeyValue()
-        @keyHandler = {}
         @keyHandler[tvKey.KEY_UP] = =>
             @offset -1
         @keyHandler[tvKey.KEY_DOWN] = =>
