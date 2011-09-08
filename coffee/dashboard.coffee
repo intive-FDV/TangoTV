@@ -1,3 +1,5 @@
+tvKey = new Common.API.TVKeyValue()
+
 class HiddableContent
     show: -> @getContainer().show()
     hide: -> @getContainer().hide()
@@ -13,7 +15,6 @@ class ColorChanger extends HiddableContent
     constructor: (elementSelector) ->
         @element = $(elementSelector)
 
-        tvKey = new Common.API.TVKeyValue()
         @keyHandler = {}
         
         @keyHandler[tvKey.KEY_RED] = =>
@@ -124,7 +125,6 @@ class Calculator extends HiddableContent
         @history = @element.find(".#{@HISTORY_CLASS}")
         @op = @noop
 
-        tvKey = new Common.API.TVKeyValue()
         @keyHandler = {}
         
         @keyHandler[tvKey.KEY_RED] = =>
@@ -166,7 +166,6 @@ class Html5VideoPlayer extends HiddableContent
         @container = $(containerSelector)
         @video = $(elementSelector)[0]
 
-        tvKey = new Common.API.TVKeyValue()
         @keyHandler = {}
         @keyHandler[tvKey.KEY_PLAY] = =>
             log.debug "PLAY"
@@ -197,10 +196,9 @@ class Video extends HiddableContent
         @container = $(config.containerSelector)
         @placeholder = $(config.placeholderSelector)
         @fullscreenPh = $(config.fullPhSelector)
-        @player = new TVApp.VideoPlayer(config.playerConfig)
+        @player = new TangoTV.VideoPlayer(config.playerConfig)
 
         # TODO Make keys configurable
-        tvKey = new Common.API.TVKeyValue()
         @keyHandler = {}
         @keyHandler[tvKey.KEY_PLAY] = => @player.play()
         @keyHandler[tvKey.KEY_PAUSE] = => @player.togglePause()
@@ -210,7 +208,7 @@ class Video extends HiddableContent
             @fullscreenPh.toggle()
 
 # "Dashboard" is just an arbitrary name for the first interactive screen
-class Dashboard extends TVApp.Screen
+class Dashboard extends TangoTV.Screen
 
     show: (content) ->
         @shown?.hide()
@@ -219,18 +217,16 @@ class Dashboard extends TVApp.Screen
         @setKeyHandler content.keyHandler
 
     onLoad: ->
-        @menu = new TVApp.Menu(
+        @menu = new TangoTV.Menu(
             containerSelector: '.menu'
             options: [
                 {
                     html: 'Color changer'
                     callback: => @show @colorChanger
-                },
-                {
+                }, {
                     html: 'Calculator'
                     callback: => @show @calculator
-                },
-                {
+                }, {
                     html: 'Video'
                     callback: => @show @videoPlayer
                 }
@@ -264,4 +260,4 @@ class Dashboard extends TVApp.Screen
         log.debug "Dashboard loaded"
         super()
 
-TVApp.Dashboard = Dashboard
+TangoTV.Dashboard = Dashboard

@@ -1,5 +1,5 @@
 (function() {
-  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, Video;
+  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, Video, tvKey;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -8,6 +8,7 @@
     child.__super__ = parent.prototype;
     return child;
   }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  tvKey = new Common.API.TVKeyValue();
   HiddableContent = (function() {
     function HiddableContent() {}
     HiddableContent.prototype.show = function() {
@@ -32,9 +33,7 @@
       });
     };
     function ColorChanger(elementSelector) {
-      var tvKey;
       this.element = $(elementSelector);
-      tvKey = new Common.API.TVKeyValue();
       this.keyHandler = {};
       this.keyHandler[tvKey.KEY_RED] = __bind(function() {
         return this.setColor("#a90921");
@@ -143,13 +142,12 @@
       return this.op = operation;
     };
     function Calculator(containerSelector, elementSelector) {
-      var num, tvKey, _fn;
+      var num, _fn;
       this.container = $(containerSelector);
       this.element = $(elementSelector);
       this.display = this.element.find("." + this.DISPLAY_CLASS);
       this.history = this.element.find("." + this.HISTORY_CLASS);
       this.op = this.noop;
-      tvKey = new Common.API.TVKeyValue();
       this.keyHandler = {};
       this.keyHandler[tvKey.KEY_RED] = __bind(function() {
         return this.calculateAndSetOperation(this.subtraction, "-");
@@ -194,10 +192,8 @@
       return this.container;
     };
     function Html5VideoPlayer(containerSelector, elementSelector) {
-      var tvKey;
       this.container = $(containerSelector);
       this.video = $(elementSelector)[0];
-      tvKey = new Common.API.TVKeyValue();
       this.keyHandler = {};
       this.keyHandler[tvKey.KEY_PLAY] = __bind(function() {
         log.debug("PLAY");
@@ -232,12 +228,10 @@
       return this.player.hide();
     };
     function Video(config) {
-      var tvKey;
       this.container = $(config.containerSelector);
       this.placeholder = $(config.placeholderSelector);
       this.fullscreenPh = $(config.fullPhSelector);
-      this.player = new TVApp.VideoPlayer(config.playerConfig);
-      tvKey = new Common.API.TVKeyValue();
+      this.player = new TangoTV.VideoPlayer(config.playerConfig);
       this.keyHandler = {};
       this.keyHandler[tvKey.KEY_PLAY] = __bind(function() {
         return this.player.play();
@@ -256,7 +250,7 @@
     return Video;
   })();
   Dashboard = (function() {
-    __extends(Dashboard, TVApp.Screen);
+    __extends(Dashboard, TangoTV.Screen);
     function Dashboard() {
       Dashboard.__super__.constructor.apply(this, arguments);
     }
@@ -271,7 +265,7 @@
     };
     Dashboard.prototype.onLoad = function() {
       var addReturnKey;
-      this.menu = new TVApp.Menu({
+      this.menu = new TangoTV.Menu({
         containerSelector: '.menu',
         options: [
           {
@@ -321,5 +315,5 @@
     };
     return Dashboard;
   })();
-  TVApp.Dashboard = Dashboard;
+  TangoTV.Dashboard = Dashboard;
 }).call(this);

@@ -5,9 +5,10 @@
 	<ListIcon itemtype="string"></ListIcon>
 	<BigListIcon itemtype="string"></BigListIcon>
 	<type itemtype="string">user</type>
-	<cpname itemtype="string"></cpname>
+	<cpname itemtype="string">TangoTV-Showcase</cpname>
 	<cplogo itemtype="string"></cplogo>
-	<cpauthjs itemtype="string"></cpauthjs>
+	<cpauthjs itemtype="string">SSOAuth</cpauthjs>
+    <login>y</login>
 	<ver itemtype="string"></ver>
 	<mgver itemtype="string"></mgver>
 	<fullwidget itemtype="boolean">y</fullwidget>

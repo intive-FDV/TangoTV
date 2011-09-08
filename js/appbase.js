@@ -1,5 +1,21 @@
 (function() {
-  var log;
+  var TangoTV, log;
+  TangoTV = {};
+  TangoTV.css = {
+    switchClasses: function($element, removed, added) {
+      $element.removeClass(removed);
+      return $element.addClass(added);
+    }
+  };
+  TangoTV.util = {
+    STRING_TYPENAME: "string",
+    resolveToJqueryIfSelector: function(object) {
+      if (typeof object === TangoTV.util.STRING_TYPENAME) {
+        return $(object);
+      }
+      return object;
+    }
+  };
   log = {
     levels: {
       TRACE: 5,
@@ -41,5 +57,6 @@
       return alert(m);
     }
   };
+  window.TangoTV = TangoTV;
   window.log = log;
 }).call(this);

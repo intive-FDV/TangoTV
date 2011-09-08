@@ -9,7 +9,7 @@
     return child;
   };
   Splash = (function() {
-    __extends(Splash, TVApp.Screen);
+    __extends(Splash, TangoTV.Screen);
     Splash.prototype.timeout = 300;
     function Splash(fakeBodySelector, nextPageUri, timeout) {
       if (timeout != null) {
@@ -36,5 +36,5 @@
     };
     return Splash;
   })();
-  TVApp.Splash = Splash;
+  TangoTV.Splash = Splash;
 }).call(this);

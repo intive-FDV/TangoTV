@@ -84,4 +84,4 @@ class Menu
             selected = @preFirst
         @selectItem selected
 
-TVApp.Menu = Menu
+TangoTV.Menu = Menu

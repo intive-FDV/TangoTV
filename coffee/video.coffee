@@ -2,7 +2,7 @@ STOPPED = 0
 PLAYING = 1
 PAUSED =  2
 
-class TVApp.VideoPlayer
+class TangoTV.VideoPlayer
 
     cfg:
         dimensions:
@@ -100,21 +100,21 @@ class TVApp.VideoPlayer
             return # Throw something
 
         # Big WTF for Samsung here
-        TVApp.__video =
+        TangoTV.__video =
             setCurTime: =>
-                log.debug "Current time in TVApp.__video: #{arguments[0]}"
+                log.debug "Current time in TangoTV.__video: #{arguments[0]}"
                 @setCurTime(arguments)
             setTotalTime: => @setTotalTime(arguments)
             onBufferingStart: => @onBufferingStart(arguments)
             onBufferingProgress: => @onBufferingProgress(arguments)
             onBufferingComplete: => @onBufferingComplete(arguments)
-        TVApp.setCurTime = => @setCurTime(arguments)
+        TangoTV.setCurTime = => @setCurTime(arguments)
 
-        @plugin.OnCurrentPlayTime = "TVApp.__video.setCurTime"
-        @plugin.OnStreamInfoReady = "TVApp.__video.setTotalTime"
-        @plugin.OnBufferingStart = "TVApp.__video.onBufferingStart"
-        @plugin.OnBufferingProgress = "TVApp.__video.onBufferingProgress"
-        @plugin.OnBufferingComplete = "TVApp.__video.onBufferingComplete"
+        @plugin.OnCurrentPlayTime = "TangoTV.__video.setCurTime"
+        @plugin.OnStreamInfoReady = "TangoTV.__video.setTotalTime"
+        @plugin.OnBufferingStart = "TangoTV.__video.onBufferingStart"
+        @plugin.OnBufferingProgress = "TangoTV.__video.onBufferingProgress"
+        @plugin.OnBufferingComplete = "TangoTV.__video.onBufferingComplete"
 
          # Would be nicer to do it this way
 #        @plugin.OnCurrentPlayTime = => @setCurTime(arguments)

@@ -1,3 +1,17 @@
+TangoTV = {}
+
+TangoTV.css =
+    switchClasses: ($element, removed, added) ->
+        $element.removeClass removed
+        $element.addClass added
+
+TangoTV.util =
+    STRING_TYPENAME: "string"
+    resolveToJqueryIfSelector: (object) ->
+        if typeof object == TangoTV.util.STRING_TYPENAME
+            return $(object)
+        return object
+
 log =
     levels:
         TRACE:  5
@@ -27,4 +41,5 @@ log =
 
     fallbackAppend: (m) -> alert m
 
+window.TangoTV = TangoTV
 window.log = log

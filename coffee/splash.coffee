@@ -1,4 +1,4 @@
-class Splash extends TVApp.Screen
+class Splash extends TangoTV.Screen
     timeout: 300 #0
 
     constructor: (fakeBodySelector, nextPageUri, timeout) ->
@@ -21,4 +21,4 @@ class Splash extends TVApp.Screen
         log.debug "Advancing to main screen"
         @loadPage @nextPageUri
 
-TVApp.Splash = Splash
+TangoTV.Splash = Splash

@@ -4,7 +4,7 @@
   STOPPED = 0;
   PLAYING = 1;
   PAUSED = 2;
-  TVApp.VideoPlayer = (function() {
+  TangoTV.VideoPlayer = (function() {
     VideoPlayer.prototype.cfg = {
       dimensions: {
         left: 0,
@@ -102,9 +102,9 @@
         log.error("Player plugin not found in page");
         return;
       }
-      TVApp.__video = {
+      TangoTV.__video = {
         setCurTime: __bind(function() {
-          log.debug("Current time in TVApp.__video: " + arguments[0]);
+          log.debug("Current time in TangoTV.__video: " + arguments[0]);
           return this.setCurTime(arguments);
         }, this),
         setTotalTime: __bind(function() {
@@ -120,14 +120,14 @@
           return this.onBufferingComplete(arguments);
         }, this)
       };
-      TVApp.setCurTime = __bind(function() {
+      TangoTV.setCurTime = __bind(function() {
         return this.setCurTime(arguments);
       }, this);
-      this.plugin.OnCurrentPlayTime = "TVApp.__video.setCurTime";
-      this.plugin.OnStreamInfoReady = "TVApp.__video.setTotalTime";
-      this.plugin.OnBufferingStart = "TVApp.__video.onBufferingStart";
-      this.plugin.OnBufferingProgress = "TVApp.__video.onBufferingProgress";
-      this.plugin.OnBufferingComplete = "TVApp.__video.onBufferingComplete";
+      this.plugin.OnCurrentPlayTime = "TangoTV.__video.setCurTime";
+      this.plugin.OnStreamInfoReady = "TangoTV.__video.setTotalTime";
+      this.plugin.OnBufferingStart = "TangoTV.__video.onBufferingStart";
+      this.plugin.OnBufferingProgress = "TangoTV.__video.onBufferingProgress";
+      this.plugin.OnBufferingComplete = "TangoTV.__video.onBufferingComplete";
     }
     VideoPlayer.prototype.setCurTime = function(time) {
       return log.debug("Current time: " + time);

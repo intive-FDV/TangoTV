@@ -99,5 +99,5 @@
     };
     return Menu;
   })();
-  TVApp.Menu = Menu;
+  TangoTV.Menu = Menu;
 }).call(this);
