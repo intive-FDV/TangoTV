@@ -1,5 +1,5 @@
 (function() {
-  var NavKey, Screen, TangoTV;
+  var NavKey, Screen;
   NavKey = (function() {
     var AVAILABLE_KEYS, KEY_CLASS, KEY_DESCRIPTION_CLASS, KEY_ICON_CLASS, NAVKEY_CLASS;
     NAVKEY_CLASS = "nav-key";
@@ -94,7 +94,5 @@
     };
     return Screen;
   })();
-  TangoTV = {};
   TangoTV.Screen = Screen;
-  window.TangoTV = TangoTV;
 }).call(this);

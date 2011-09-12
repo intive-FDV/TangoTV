@@ -91,6 +91,4 @@ class Screen
     loadPage: (uri) ->
         document.location = uri
 
-TangoTV = {}
 TangoTV.Screen = Screen
-window.TangoTV = TangoTV
