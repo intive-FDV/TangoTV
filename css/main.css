@@ -73,6 +73,19 @@ body {
     float: left;
     vertical-align: top; }
 
+.scrollbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: #d3d3d3; }
+  .scrollbar .handle {
+    width: 10px;
+    background-color: #aaaaaa; }
+
 .calculator-help {
   width: 350px;
   height: 100%; }
@@ -110,13 +123,15 @@ body {
   height: 540px; }
 
 .nav-key {
+  font-family: sans;
+  font-size: 14px;
+  color: white;
+  background: #888888;
   position: absolute;
   left: 0;
   bottom: 0;
   width: 960px;
   height: 34px;
-  background: #888888;
-  color: white;
   z-index: 10000; }
   .nav-key .key-helper {
     position: absolute;
@@ -127,6 +142,8 @@ body {
       height: 16px;
       margin-right: 3px; }
     .nav-key .key-helper .key-desc {
+      position: relative;
+      top: -3px;
       display: inline-block; }
   .nav-key #nav-up-down {
     left: 9px; }

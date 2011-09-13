@@ -158,6 +158,48 @@ class Calculator extends HiddableContent
             "C": "Divide"
             "D": "Add"
 
+class ScrollerPane extends HiddableContent
+
+    SCROLLABLE_ID = "scrollable"
+    getContainer: -> @container
+
+    show: ->
+        super()
+        @scroller.updateBar()
+
+    contentTemplate: (o) ->
+        """
+            <div id="#{o.id}">
+            #{
+            content = ""
+            for i in [1..40]
+                content += "#{(j*j for j in [1..i])}<br>"
+            content
+            }
+            </div>
+        """
+
+    constructor: (containerSelector) ->
+        @container = $(containerSelector)
+        @container.append $(@contentTemplate(id: SCROLLABLE_ID))
+        scrollable = $("##{SCROLLABLE_ID}")
+        scrollable.css(
+            width: "200px"
+            height: "200px"
+            overflow: "auto"
+        )
+        @scroller = new TangoTV.Scroller(
+            element: scrollable
+            onTop: -> log.debug "Scrolled to top"
+            onBottom: -> log.debug "Scrolled to bottom"
+        )
+        @keyHandler = {}
+        @keyHandler[tvKey.KEY_DOWN] = =>
+            @scroller.scrollDown()
+        @keyHandler[tvKey.KEY_UP] = =>
+            @scroller.scrollUp()
+
+
 class Html5VideoPlayer extends HiddableContent
 
     getContainer: -> @container
@@ -227,6 +269,9 @@ class Dashboard extends TangoTV.Screen
                     html: 'Calculator'
                     callback: => @show @calculator
                 }, {
+                    html: 'Scroller'
+                    callback: => @show @scroller
+                }, {
                     html: 'Video'
                     callback: => @show @videoPlayer
                 }
@@ -242,6 +287,9 @@ class Dashboard extends TangoTV.Screen
 
         @calculator = new Calculator("#calculator-box", "#calculator")
         addReturnKey(@calculator.keyHandler)
+
+        @scroller = new ScrollerPane("#scroller")
+        addReturnKey(@scroller.keyHandler)
 
         @html5Player = new Html5VideoPlayer("#html5-video-container", "#html5-video")
         addReturnKey(@html5Player.keyHandler)

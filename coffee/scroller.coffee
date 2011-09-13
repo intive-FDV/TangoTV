@@ -1,0 +1,81 @@
+class Scroller
+
+    # TODO Use scrollHeight and scrollWidth to get full content size
+
+    config:
+        vStep: 80
+        hStep: 40
+        showBar: true
+        position:
+            x: 0
+            y: 0
+        cssClasses:
+            bar: "scrollbar"
+            handle: "handle"
+        barTemplate: (barClass, handleClass) ->
+            """
+            <div class="#{barClass}">
+                <div class="#{handleClass}"></div>
+            </div>
+            """
+
+    scrollDown: ->
+        @scrollVertical(@config.vStep)
+
+    scrollUp: ->
+        @scrollVertical(- @config.vStep)
+
+    scrollVertical: (amount) ->
+        @element.scrollTop(@position.y + amount)
+        scrollOffset = @element.scrollTop()
+        if @position.y != scrollOffset
+            @position.y = scrollOffset
+            @config.onTop?() if @position.y <= 0
+            @config.onBottom?() if @position.y >= @element.attr('scrollHeight') - @element.height()
+        @updateBar()
+
+#   scrollRight: ->                                  #
+#        @scrollHorizontal(@config.hStep)             #
+#                                                     #
+#    scrollLeft: ->                                   #
+#        @scrollHorizontal(- @config.hStep)            #  Not working: scrollLeft useless in MAPLE
+#                                                     #
+#    scrollHorizontal: (amount) ->                    #
+#        @element.scrollLeft(@position.x + amount)    #
+#        @position.x = @element.scrollLeft()         #
+
+    createBar: ->
+        return unless @config.showBar
+        classes = @config.cssClasses
+        @element.append $(@config.barTemplate(classes.bar, classes.handle))
+        if @element.css("position") is "static"
+            @element.css(position: "relative")
+        @element.find(".#{classes.handle}").css(position: "absolute")
+
+    # TODO Decouple scrollbar in separate component
+    updateBar: ->
+        return unless @config.showBar
+
+        bar = @element.find(".#{@config.cssClasses.bar}")
+        bar.css(
+            top: "#{@position.y}px"
+        )
+
+        handle = @element.find(".#{@config.cssClasses.handle}")
+        barHeight = bar.height() # @element.height()
+        handleHeight = 100 * @element.height() / @element.attr('scrollHeight')
+        handleTop = barHeight * @position.y / @element.attr('scrollHeight')
+        handle.css(
+            top: "#{handleTop}px"
+            height: "#{handleHeight}%"
+        )
+
+    constructor: (config) ->
+        $.extend(true, @config, config)
+        @element = TangoTV.util.resolveToJqueryIfSelector(@config.element)
+        @position = TangoTV.util.deepCopy(@config.position)
+
+        @createBar()
+        @updateBar()
+
+TangoTV.Scroller = Scroller

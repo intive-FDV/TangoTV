@@ -7,10 +7,16 @@ TangoTV.css =
 
 TangoTV.util =
     STRING_TYPENAME: "string"
+
+    deepCopy: (object) ->
+        $.extend(true, {}, object)
+
     resolveToJqueryIfSelector: (object) ->
         if typeof object == TangoTV.util.STRING_TYPENAME
             return $(object)
         return object
+
+window.TangoTV = TangoTV
 
 log =
     levels:
@@ -41,5 +47,4 @@ log =
 
     fallbackAppend: (m) -> alert m
 
-window.TangoTV = TangoTV
 window.log = log

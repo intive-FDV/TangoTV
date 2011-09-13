@@ -88,6 +88,18 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
         float: left
         vertical-align: top
 
+.scrollbar
+    position: absolute
+    top: 0
+    right: 0
+    width: 10px
+    height: 100%
+    padding: 0
+    margin: 0
+    background-color: $lightGray
+    .handle
+        width: 10px
+        background-color: $gray
 
 .calculator-help
     width: 350px
@@ -132,13 +144,15 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
         background: url($imgUrl) left top no-repeat
 
 .nav-key
+    font-family: sans
+    font-size: 14px
+    color: white
+    background: #888
     position: absolute
     left: 0
     bottom: 0
     width: $pageWidth
     height: $navKeyHeight
-    background: #888
-    color: white
     z-index: $topmost
 
     .key-helper
@@ -150,6 +164,8 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
             height: 16px
             margin-right: 3px
         .key-desc
+            position: relative
+            top: -3px
             display: inline-block
 
     $navKeyPad: 9px

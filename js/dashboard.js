@@ -1,5 +1,5 @@
 (function() {
-  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, Video, tvKey;
+  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, ScrollerPane, Video, tvKey;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -186,6 +186,71 @@
     }
     return Calculator;
   })();
+  ScrollerPane = (function() {
+    var SCROLLABLE_ID;
+    __extends(ScrollerPane, HiddableContent);
+    SCROLLABLE_ID = "scrollable";
+    ScrollerPane.prototype.getContainer = function() {
+      return this.container;
+    };
+    ScrollerPane.prototype.show = function() {
+      ScrollerPane.__super__.show.call(this);
+      return this.scroller.updateBar();
+    };
+    ScrollerPane.prototype.contentTemplate = function(o) {
+      var content, i, j;
+      return "<div id=\"" + o.id + "\">\n" + ((function() {
+        content = "";
+        for (i = 1; i <= 40; i++) {
+          content += "" + ((function() {
+            var _results;
+            _results = [];
+            for (j = 1; 1 <= i ? j <= i : j >= i; 1 <= i ? j++ : j--) {
+              _results.push(j * j);
+            }
+            return _results;
+          })()) + "<br>";
+        }
+        return content;
+      })()) + "\n</div>";
+    };
+    function ScrollerPane(containerSelector) {
+      var scrollable;
+      this.container = $(containerSelector);
+      this.container.append($(this.contentTemplate({
+        id: SCROLLABLE_ID
+      })));
+      scrollable = $("#" + SCROLLABLE_ID);
+      scrollable.css({
+        width: "200px",
+        height: "200px",
+        overflow: "auto"
+      });
+      this.scroller = new TangoTV.Scroller({
+        element: scrollable,
+        onTop: function() {
+          return log.debug("TOP");
+        },
+        onBottom: function() {
+          return log.debug("BOTTOM");
+        }
+      });
+      this.keyHandler = {};
+      this.keyHandler[tvKey.KEY_DOWN] = __bind(function() {
+        return this.scroller.scrollDown();
+      }, this);
+      this.keyHandler[tvKey.KEY_UP] = __bind(function() {
+        return this.scroller.scrollUp();
+      }, this);
+      this.keyHandler[tvKey.KEY_RIGHT] = __bind(function() {
+        return this.scroller.scrollRight();
+      }, this);
+      this.keyHandler[tvKey.KEY_LEFT] = __bind(function() {
+        return this.scroller.scrollLeft();
+      }, this);
+    }
+    return ScrollerPane;
+  })();
   Html5VideoPlayer = (function() {
     __extends(Html5VideoPlayer, HiddableContent);
     Html5VideoPlayer.prototype.getContainer = function() {
@@ -279,6 +344,11 @@
               return this.show(this.calculator);
             }, this)
           }, {
+            html: 'Scroller',
+            callback: __bind(function() {
+              return this.show(this.scroller);
+            }, this)
+          }, {
             html: 'Video',
             callback: __bind(function() {
               return this.show(this.videoPlayer);
@@ -298,6 +368,8 @@
       addReturnKey(this.colorChanger.keyHandler);
       this.calculator = new Calculator("#calculator-box", "#calculator");
       addReturnKey(this.calculator.keyHandler);
+      this.scroller = new ScrollerPane("#scroller");
+      addReturnKey(this.scroller.keyHandler);
       this.html5Player = new Html5VideoPlayer("#html5-video-container", "#html5-video");
       addReturnKey(this.html5Player.keyHandler);
       this.videoPlayer = new Video({

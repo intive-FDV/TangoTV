@@ -9,6 +9,9 @@
   };
   TangoTV.util = {
     STRING_TYPENAME: "string",
+    deepCopy: function(object) {
+      return $.extend(true, {}, object);
+    },
     resolveToJqueryIfSelector: function(object) {
       if (typeof object === TangoTV.util.STRING_TYPENAME) {
         return $(object);
@@ -16,6 +19,7 @@
       return object;
     }
   };
+  window.TangoTV = TangoTV;
   log = {
     levels: {
       TRACE: 5,
@@ -57,6 +61,5 @@
       return alert(m);
     }
   };
-  window.TangoTV = TangoTV;
   window.log = log;
 }).call(this);

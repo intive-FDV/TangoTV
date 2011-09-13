@@ -1,7 +1,3 @@
-switchClasses = ($element, removed, added) ->
-    $element.removeClass removed
-    $element.addClass added
-
 class Menu
     ###
     Configuration options:
@@ -35,9 +31,9 @@ class Menu
         @selectItem(@selected)
 
     selectItem: (index) ->
-        switchClasses $(@items[@selected]), @selectedClass, @unselectedClass
+        TangoTV.css.switchClasses $(@items[@selected]), @selectedClass, @unselectedClass
         @selected = index
-        switchClasses $(@items[@selected]), @unselectedClass, @selectedClass
+        TangoTV.css.switchClasses $(@items[@selected]), @unselectedClass, @selectedClass
 
     openSelectedItem: ->
         @container.find(".#{@openClass}").removeClass(@openClass)

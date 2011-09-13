@@ -1,10 +1,6 @@
 (function() {
-  var Menu, switchClasses;
+  var Menu;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  switchClasses = function($element, removed, added) {
-    $element.removeClass(removed);
-    return $element.addClass(added);
-  };
   Menu = (function() {
     /*
         Configuration options:
@@ -38,9 +34,9 @@
       return this.selectItem(this.selected);
     };
     Menu.prototype.selectItem = function(index) {
-      switchClasses($(this.items[this.selected]), this.selectedClass, this.unselectedClass);
+      TangoTV.css.switchClasses($(this.items[this.selected]), this.selectedClass, this.unselectedClass);
       this.selected = index;
-      return switchClasses($(this.items[this.selected]), this.unselectedClass, this.selectedClass);
+      return TangoTV.css.switchClasses($(this.items[this.selected]), this.unselectedClass, this.selectedClass);
     };
     Menu.prototype.openSelectedItem = function() {
       var _base;
