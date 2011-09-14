@@ -229,10 +229,10 @@
       this.scroller = new TangoTV.Scroller({
         element: scrollable,
         onTop: function() {
-          return log.debug("TOP");
+          return log.debug("Scrolled to top");
         },
         onBottom: function() {
-          return log.debug("BOTTOM");
+          return log.debug("Scrolled to bottom");
         }
       });
       this.keyHandler = {};
@@ -241,12 +241,6 @@
       }, this);
       this.keyHandler[tvKey.KEY_UP] = __bind(function() {
         return this.scroller.scrollUp();
-      }, this);
-      this.keyHandler[tvKey.KEY_RIGHT] = __bind(function() {
-        return this.scroller.scrollRight();
-      }, this);
-      this.keyHandler[tvKey.KEY_LEFT] = __bind(function() {
-        return this.scroller.scrollLeft();
       }, this);
     }
     return ScrollerPane;

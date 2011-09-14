@@ -4,7 +4,13 @@
     Scroller.prototype.config = {
       vStep: 80,
       hStep: 40,
-      showBar: true,
+      bar: {
+        show: true,
+        topOffset: 0,
+        template: function(barClass, handleClass) {
+          return "<div class=\"" + barClass + "\">\n    <div class=\"" + handleClass + "\"></div>\n</div>";
+        }
+      },
       position: {
         x: 0,
         y: 0
@@ -12,9 +18,6 @@
       cssClasses: {
         bar: "scrollbar",
         handle: "handle"
-      },
-      barTemplate: function(barClass, handleClass) {
-        return "<div class=\"" + barClass + "\">\n    <div class=\"" + handleClass + "\"></div>\n</div>";
       }
     };
     Scroller.prototype.scrollDown = function() {
@@ -44,11 +47,11 @@
     };
     Scroller.prototype.createBar = function() {
       var classes;
-      if (!this.config.showBar) {
+      if (!this.config.bar.show) {
         return;
       }
       classes = this.config.cssClasses;
-      this.element.append($(this.config.barTemplate(classes.bar, classes.handle)));
+      this.element.append($(this.config.bar.template(classes.bar, classes.handle)));
       if (this.element.css("position") === "static") {
         this.element.css({
           position: "relative"
@@ -60,12 +63,12 @@
     };
     Scroller.prototype.updateBar = function() {
       var bar, barHeight, handle, handleHeight, handleTop;
-      if (!this.config.showBar) {
+      if (!this.config.bar.show) {
         return;
       }
       bar = this.element.find("." + this.config.cssClasses.bar);
       bar.css({
-        top: "" + this.position.y + "px"
+        top: "" + (this.position.y + this.config.bar.topOffset) + "px"
       });
       handle = this.element.find("." + this.config.cssClasses.handle);
       barHeight = bar.height();

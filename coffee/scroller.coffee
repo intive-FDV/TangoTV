@@ -5,19 +5,22 @@ class Scroller
     config:
         vStep: 80
         hStep: 40
-        showBar: true
+        bar:
+            show: true
+            topOffset: 0
+            template: (barClass, handleClass) ->
+                """
+                <div class="#{barClass}">
+                    <div class="#{handleClass}"></div>
+                </div>
+                """
         position:
             x: 0
             y: 0
         cssClasses:
             bar: "scrollbar"
             handle: "handle"
-        barTemplate: (barClass, handleClass) ->
-            """
-            <div class="#{barClass}">
-                <div class="#{handleClass}"></div>
-            </div>
-            """
+
 
     scrollDown: ->
         @scrollVertical(@config.vStep)
@@ -45,20 +48,20 @@ class Scroller
 #        @position.x = @element.scrollLeft()         #
 
     createBar: ->
-        return unless @config.showBar
+        return unless @config.bar.show
         classes = @config.cssClasses
-        @element.append $(@config.barTemplate(classes.bar, classes.handle))
+        @element.append $(@config.bar.template(classes.bar, classes.handle))
         if @element.css("position") is "static"
             @element.css(position: "relative")
         @element.find(".#{classes.handle}").css(position: "absolute")
 
     # TODO Decouple scrollbar in separate component
     updateBar: ->
-        return unless @config.showBar
+        return unless @config.bar.show
 
         bar = @element.find(".#{@config.cssClasses.bar}")
         bar.css(
-            top: "#{@position.y}px"
+            top: "#{@position.y + @config.bar.topOffset}px"
         )
 
         handle = @element.find(".#{@config.cssClasses.handle}")
