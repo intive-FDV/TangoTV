@@ -249,6 +249,31 @@ class Video extends HiddableContent
             @player.toggleFullscreen()
             @fullscreenPh.toggle()
 
+class Weather extends HiddableContent
+
+    getContainer: -> @container
+
+    conditionsTemplate = (cond, today) ->
+        """
+        <div class="weather conditions">
+            <img src="#{today.weatherIconUrl[0].value}">
+            #{cond.weatherDesc[0].value}, #{cond.temp_C}ºC
+            <div class="today">#{today.tempMaxC}ºC max - #{today.tempMinC}ºC min</div>
+        </div>
+        """
+
+    constructor: (config) ->
+        @container = $(config.containerSelector)
+
+        $.extend(config.forecastConfig,
+            success: =>
+                @container.html(conditionsTemplate(@forecast.conditions, @forecast.forecasts[0]))
+        )
+        @forecast = new TangoTV.Forecast(config.forecastConfig)
+
+        # TODO Make keys configurable
+        @keyHandler = {}
+
 # "Dashboard" is just an arbitrary name for the first interactive screen
 class Dashboard extends TangoTV.Screen
 
@@ -274,6 +299,9 @@ class Dashboard extends TangoTV.Screen
                 }, {
                     html: 'Video'
                     callback: => @show @videoPlayer
+                }, {
+                    html: 'Weather'
+                    callback: => @show @weather
                 }
             ]
         )
@@ -302,6 +330,16 @@ class Dashboard extends TangoTV.Screen
                 url: "D:/Workspaces/samsung-tv/app-template/resource/video/movie.mp4"
         )
         addReturnKey(@videoPlayer.keyHandler)
+
+        @weather = new Weather(
+            containerSelector: "#weather-container"
+            forecastConfig:
+                wwoApiKey: "e5a8a4d2d2163552112309"
+                location:
+                    city: "Buenos Aires"
+                    country: "Argentina"
+        )
+        addReturnKey(@weather.keyHandler)
 
         @setKeyHandler @menu.keyHandler
 

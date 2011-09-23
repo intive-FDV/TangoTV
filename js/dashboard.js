@@ -1,5 +1,5 @@
 (function() {
-  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, ScrollerPane, Video, tvKey;
+  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, ScrollerPane, Video, Weather, tvKey;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -308,6 +308,27 @@
     }
     return Video;
   })();
+  Weather = (function() {
+    var conditionsTemplate;
+    __extends(Weather, HiddableContent);
+    Weather.prototype.getContainer = function() {
+      return this.container;
+    };
+    conditionsTemplate = function(cond, today) {
+      return "<div class=\"weather conditions\">\n    <img src=\"" + today.weatherIconUrl[0].value + "\">\n    " + cond.weatherDesc[0].value + ", " + cond.temp_C + "ºC\n    <div class=\"today\">" + today.tempMaxC + "ºC max - " + today.tempMinC + "ºC min</div>\n</div>";
+    };
+    function Weather(config) {
+      this.container = $(config.containerSelector);
+      $.extend(config.forecastConfig, {
+        success: __bind(function() {
+          return this.container.html(conditionsTemplate(this.forecast.conditions, this.forecast.forecasts[0]));
+        }, this)
+      });
+      this.forecast = new TangoTV.Forecast(config.forecastConfig);
+      this.keyHandler = {};
+    }
+    return Weather;
+  })();
   Dashboard = (function() {
     __extends(Dashboard, TangoTV.Screen);
     function Dashboard() {
@@ -347,6 +368,11 @@
             callback: __bind(function() {
               return this.show(this.videoPlayer);
             }, this)
+          }, {
+            html: 'Weather',
+            callback: __bind(function() {
+              return this.show(this.weather);
+            }, this)
           }
         ]
       });
@@ -375,6 +401,17 @@
         }
       });
       addReturnKey(this.videoPlayer.keyHandler);
+      this.weather = new Weather({
+        containerSelector: "#weather-container",
+        forecastConfig: {
+          wwoApiKey: "e5a8a4d2d2163552112309",
+          location: {
+            city: "Buenos Aires",
+            country: "Argentina"
+          }
+        }
+      });
+      addReturnKey(this.weather.keyHandler);
       this.setKeyHandler(this.menu.keyHandler);
       log.debug("Dashboard loaded");
       return Dashboard.__super__.onLoad.call(this);
