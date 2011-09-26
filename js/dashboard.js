@@ -309,19 +309,36 @@
     return Video;
   })();
   Weather = (function() {
-    var conditionsTemplate;
+    var conditionsTemplate, dayNames, forecast, forecastsTemplate;
     __extends(Weather, HiddableContent);
     Weather.prototype.getContainer = function() {
       return this.container;
     };
     conditionsTemplate = function(cond, today) {
-      return "<div class=\"weather conditions\">\n    <img src=\"" + today.weatherIconUrl[0].value + "\">\n    " + cond.weatherDesc[0].value + ", " + cond.temp_C + "ºC\n    <div class=\"today\">" + today.tempMaxC + "ºC max - " + today.tempMinC + "ºC min</div>\n</div>";
+      return "<div class=\"weather conditions\">\n    <img src=\"" + today.weatherIconUrl[0].value + "\">\n    <div class=\"temp\">" + cond.temp_C + "ºC</div>\n    <div class=\"condition\">" + cond.weatherDesc[0].value + "</div>\n</div>";
+    };
+    forecast = function(forecast, dayName) {
+      return "<div class=\"forecast\">\n    <div class=\"day-name\">" + dayName + "</div>\n    <img src=\"" + forecast.weatherIconUrl[0].value + "\">\n    <div class=\"temp-extremes\">" + forecast.tempMaxC + "ºC - " + forecast.tempMinC + "ºC </div>\n</div>";
+    };
+    dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    forecastsTemplate = function(forecasts) {
+      var date, html, i;
+      date = new Date();
+      html = "<div class=\"weather forecasts\">";
+      for (i = 0; i <= 4; i++) {
+        html += forecast(forecasts[i], dayNames[date.getDay()]);
+        date.setDate(date.getDate() + 1);
+      }
+      return html += "</div>";
     };
     function Weather(config) {
       this.container = $(config.containerSelector);
       $.extend(config.forecastConfig, {
         success: __bind(function() {
-          return this.container.html(conditionsTemplate(this.forecast.conditions, this.forecast.forecasts[0]));
+          var forecastHtml;
+          forecastHtml = conditionsTemplate(this.forecast.conditions, this.forecast.forecasts[0]);
+          forecastHtml += forecastsTemplate(this.forecast.forecasts);
+          return this.container.html(forecastHtml);
         }, this)
       });
       this.forecast = new TangoTV.Forecast(config.forecastConfig);

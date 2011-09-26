@@ -2,15 +2,19 @@ body {
   opacity: 100%;
   font-family: serif;
   background: transparent;
+  width: 960px;
+  height: 540px;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  overflow: hidden; }
 
 .fake-body {
   background-color: white;
   color: black;
   position: relative;
   width: 960px;
-  height: 540px; }
+  height: 540px;
+  overflow: hidden; }
 
 .splash #logo {
   background: url(../resource/images/splash.png) center center no-repeat;
@@ -54,8 +58,7 @@ body {
       text-shadow: black 1px 1px;
       background: #aaaaaa; }
     .content .menu .menu-item-open {
-      padding: 4px 0px 4px 9px;
-      border: 1px solid red; }
+      padding: 4px 0px 4px 9px; }
   .content .main-content {
     font-family: monospace;
     position: absolute;
@@ -121,6 +124,21 @@ body {
   left: 0;
   width: 960px;
   height: 540px; }
+
+#weather-container div {
+  display: block;
+  float: none; }
+#weather-container .weather {
+  font-family: sans; }
+  #weather-container .weather.conditions {
+    text-align: center;
+    width: 500px;
+    margin-bottom: 50px; }
+  #weather-container .weather.forecasts .forecast {
+    text-align: center;
+    width: 100px;
+    display: inline-block;
+    align: center; }
 
 .nav-key {
   font-family: sans;

@@ -11,8 +11,11 @@ body
     opacity: 100%
     font-family: serif
     background: transparent
+    width: $pageWidth
+    height: $pageHeight
     margin: 0
     padding: 0
+    overflow: hidden
 
 .fake-body
     background-color: white
@@ -20,6 +23,7 @@ body
     position: relative
     width: $pageWidth
     height: $pageHeight
+    overflow: hidden
 
 .splash
     #logo
@@ -69,7 +73,6 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
             background: $gray
         .menu-item-open
             padding: 4px 0px 4px 9px
-            border: 1px solid red
 
     .main-content
         font-family: monospace
@@ -142,6 +145,25 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
 @mixin key-icon-bg($imgUrl)
     .key-icon
         background: url($imgUrl) left top no-repeat
+
+#weather-container
+    div
+        display: block
+        float: none
+    .weather
+        font-family: sans
+        &.conditions
+            text-align: center
+            width: 500px
+            margin-bottom: 50px
+
+        &.forecasts
+            .forecast
+                text-align: center
+                width: 100px
+                display: inline-block
+                align: center
+
 
 .nav-key
     font-family: sans

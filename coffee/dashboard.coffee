@@ -257,17 +257,37 @@ class Weather extends HiddableContent
         """
         <div class="weather conditions">
             <img src="#{today.weatherIconUrl[0].value}">
-            #{cond.weatherDesc[0].value}, #{cond.temp_C}ºC
-            <div class="today">#{today.tempMaxC}ºC max - #{today.tempMinC}ºC min</div>
+            <div class="temp">#{cond.temp_C}ºC</div>
+            <div class="condition">#{cond.weatherDesc[0].value}</div>
         </div>
         """
+
+    forecast = (forecast, dayName) ->
+        """
+        <div class="forecast">
+            <div class="day-name">#{dayName}</div>
+            <img src="#{forecast.weatherIconUrl[0].value}">
+            <div class="temp-extremes">#{forecast.tempMaxC}ºC - #{forecast.tempMinC}ºC </div>
+        </div>
+        """
+
+    dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    forecastsTemplate = (forecasts) ->
+        date = new Date()
+        html = """<div class="weather forecasts">"""
+        for i in [0..4]
+            html += forecast(forecasts[i], dayNames[date.getDay()])
+            date.setDate(date.getDate() + 1);
+        html += "</div>"
 
     constructor: (config) ->
         @container = $(config.containerSelector)
 
         $.extend(config.forecastConfig,
             success: =>
-                @container.html(conditionsTemplate(@forecast.conditions, @forecast.forecasts[0]))
+                forecastHtml = conditionsTemplate(@forecast.conditions, @forecast.forecasts[0])
+                forecastHtml += forecastsTemplate(@forecast.forecasts)
+                @container.html(forecastHtml)
         )
         @forecast = new TangoTV.Forecast(config.forecastConfig)
 
