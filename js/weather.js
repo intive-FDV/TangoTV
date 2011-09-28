@@ -24,17 +24,15 @@
       }
     };
     Forecast.prototype.loadForecast = function() {
-      log.debug("Loading weather with URI " + (this.buildUrl()));
       return $.ajax({
         url: this.buildUrl(),
         dataType: 'json',
         success: __bind(function(data) {
+          var _base;
           data = data.data;
           this.conditions = data.current_condition[0];
           this.forecasts = data.weather;
-          if (this.config.success) {
-            return this.config.success();
-          }
+          return typeof (_base = this.config).success === "function" ? _base.success(this.conditions, this.forecasts) : void 0;
         }, this),
         error: __bind(function(xhr, textStatus, error) {
           var _base;

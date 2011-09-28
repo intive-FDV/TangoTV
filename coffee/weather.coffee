@@ -43,8 +43,11 @@ class TangoTV.Forecast
         else
             @query = "#{loc.lat},#{loc.lng}"
 
+    # TODO Refactor to just a function
+    # Construction of an object would be useful only if
+    # successive forecasts would be asked for, but it's
+    # not very often the case so it should just be a function
     loadForecast: ->
-        log.debug "Loading weather with URI #{@buildUrl()}"
         $.ajax
             url: @buildUrl()
             dataType: 'json'
@@ -52,11 +55,10 @@ class TangoTV.Forecast
                 data = data.data
                 @conditions = data.current_condition[0]
                 @forecasts = data.weather
-                @config.success() if @config.success
+                @config.success?(@conditions, @forecasts)
             error: (xhr, textStatus, error) =>
                 @config.error?(textStatus, error)
 
-                
 
     constructor: (config) ->
         return @config.error?("Invalid options") unless config.wwoApiKey? and
