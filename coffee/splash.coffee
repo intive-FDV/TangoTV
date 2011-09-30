@@ -1,10 +1,14 @@
-class Splash extends TangoTV.Screen
-    timeout: 300 #0
+util = TangoTV.util
 
-    constructor: (fakeBodySelector, nextPageUri, timeout) ->
-        @timeout = timeout if timeout?
-        super(fakeBodySelector)
-        @nextPageUri = nextPageUri
+class Splash extends TangoTV.Screen
+
+    config:
+        timeout: 1000
+
+    constructor: (config) ->
+        $.extend(true, @config, config)
+        @container = util.resolveToJqueryIfSelector(@config.container)
+        super(@container)
 
     onLoad: ->
         log.debug "Splash.onLoad"
@@ -15,10 +19,10 @@ class Splash extends TangoTV.Screen
         that = this
         @timer = setTimeout(
             -> that.advance(),
-            @timeout)
+            @config.timeout)
     
     advance: ->
-        log.debug "Advancing to main screen"
-        @loadPage @nextPageUri
+        log.debug "Advancing to uri: #{@config.nextPageUri}"
+        @loadPage @config.nextPageUri
 
 TangoTV.Splash = Splash

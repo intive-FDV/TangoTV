@@ -1,5 +1,5 @@
 (function() {
-  var Splash;
+  var Splash, util;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -8,15 +8,16 @@
     child.__super__ = parent.prototype;
     return child;
   };
+  util = TangoTV.util;
   Splash = (function() {
     __extends(Splash, TangoTV.Screen);
-    Splash.prototype.timeout = 300;
-    function Splash(fakeBodySelector, nextPageUri, timeout) {
-      if (timeout != null) {
-        this.timeout = timeout;
-      }
-      Splash.__super__.constructor.call(this, fakeBodySelector);
-      this.nextPageUri = nextPageUri;
+    Splash.prototype.config = {
+      timeout: 1000
+    };
+    function Splash(config) {
+      $.extend(true, this.config, config);
+      this.container = util.resolveToJqueryIfSelector(this.config.container);
+      Splash.__super__.constructor.call(this, this.container);
     }
     Splash.prototype.onLoad = function() {
       log.debug("Splash.onLoad");
@@ -28,11 +29,11 @@
       that = this;
       return this.timer = setTimeout(function() {
         return that.advance();
-      }, this.timeout);
+      }, this.config.timeout);
     };
     Splash.prototype.advance = function() {
-      log.debug("Advancing to main screen");
-      return this.loadPage(this.nextPageUri);
+      log.debug("Advancing to uri: " + this.config.nextPageUri);
+      return this.loadPage(this.config.nextPageUri);
     };
     return Splash;
   })();

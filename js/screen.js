@@ -1,5 +1,6 @@
 (function() {
-  var NavKey, Screen;
+  var NavKey, Screen, util;
+  util = TangoTV.util;
   NavKey = (function() {
     var AVAILABLE_KEYS, KEY_CLASS, KEY_DESCRIPTION_CLASS, KEY_ICON_CLASS, NAVKEY_CLASS;
     NAVKEY_CLASS = "nav-key";
@@ -41,7 +42,7 @@
     Screen.prototype.widgetAPI = new Common.API.Widget();
     Screen.prototype.tvKey = new Common.API.TVKeyValue();
     function Screen(fakeBodySelector) {
-      this.fakeBodySelector = fakeBodySelector;
+      this.fakeBodySelector = util.resolveToJqueryIfSelector(fakeBodySelector);
     }
     Screen.prototype.onLoad = function() {
       this.enableKeys("keyListener");

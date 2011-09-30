@@ -1,3 +1,5 @@
+util = TangoTV.util
+
 class NavKey
     # TODO Make all this stuff configurable on a per instance basis (but not public)
     NAVKEY_CLASS = "nav-key"
@@ -51,7 +53,7 @@ class Screen
     tvKey: new Common.API.TVKeyValue()
 
     constructor: (fakeBodySelector) ->
-        @fakeBodySelector = fakeBodySelector
+        @fakeBodySelector = util.resolveToJqueryIfSelector(fakeBodySelector)
 
     onLoad: ->
         @enableKeys("keyListener")

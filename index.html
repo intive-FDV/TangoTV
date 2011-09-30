@@ -15,7 +15,10 @@
         <script type="text/javascript">
             log.level = log.levels.DEBUG;
             // TODO: Why not make this a singleton?
-            var tvScreen = new TangoTV.Splash(".fake-body", "html/dashboard.html");
+            var tvScreen = new TangoTV.Splash({
+                container: ".fake-body",
+                nextPageUri: "html/dashboard.html"
+            });
         </script>
         
 		<link rel="stylesheet" href="css/main.css" type="text/css">
