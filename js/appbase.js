@@ -17,6 +17,44 @@
         return $(object);
       }
       return object;
+    },
+    loadScript: function(path, onLoad) {
+      var script;
+      if (onLoad == null) {
+        onLoad = (function() {});
+      }
+      script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = path;
+      script.onload = onLoad;
+      return document.getElementsByTagName('head')[0].appendChild(script);
+    },
+    queryStringParams: function(query, acceptEmptyParams) {
+      var eqPos, param, paramMap, params, _i, _len;
+      if (query == null) {
+        query = window.location.search;
+      }
+      if (acceptEmptyParams == null) {
+        acceptEmptyParams = false;
+      }
+      paramMap = {};
+      if (query.indexOf('?') === 0) {
+        query = query.substring(1);
+      }
+      while (query.indexOf('&') === 0) {
+        query = query.substring(1);
+      }
+      params = query.split('&');
+      for (_i = 0, _len = params.length; _i < _len; _i++) {
+        param = params[_i];
+        eqPos = param.indexOf('=');
+        if (eqPos > 0) {
+          paramMap[param.substring(0, eqPos)] = param.substring(eqPos + 1);
+        } else if (acceptEmptyParams) {
+          paramMap[param] = '';
+        }
+      }
+      return paramMap;
     }
   };
   window.TangoTV = TangoTV;

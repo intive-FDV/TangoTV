@@ -16,6 +16,30 @@ TangoTV.util =
             return $(object)
         return object
 
+    loadScript: (path, onLoad = (->)) ->
+        script = document.createElement('script')
+        script.type = 'text/javascript'
+        script.src = path
+        script.onload = onLoad
+        document.getElementsByTagName('head')[0].appendChild(script)
+
+    queryStringParams: (query = window.location.search, acceptEmptyParams = false) ->
+        paramMap = {}
+        # Trim the "?" if present
+        if query.indexOf('?') == 0
+            query = query.substring(1)
+        # Trim any leading ampersands
+        while query.indexOf('&') == 0
+            query = query.substring(1)
+        params = query.split('&')
+        for param in params
+            eqPos = param.indexOf('=')
+            if eqPos > 0
+                paramMap[param.substring(0, eqPos)] = param.substring(eqPos + 1)
+            else if acceptEmptyParams
+                paramMap[param] = ''
+        paramMap
+
 window.TangoTV = TangoTV
 
 log =
