@@ -10,6 +10,7 @@
   };
   util = TangoTV.util;
   Splash = (function() {
+    var defaultParams;
     __extends(Splash, TangoTV.Screen);
     Splash.prototype.config = {
       timeout: 1000
@@ -31,9 +32,27 @@
         return that.advance();
       }, this.config.timeout);
     };
+    defaultParams = ['country', 'language', 'lang', 'modelid', 'server', 'firmware', 'remocon', 'area'];
     Splash.prototype.advance = function() {
-      log.debug("Advancing to uri: " + this.config.nextPageUri);
-      return this.loadPage(this.config.nextPageUri);
+      var nextPageUri, p, params, queryString, uri, _i, _len;
+      params = util.queryStringParams();
+      uri = parseUri(this.config.nextPageUri);
+      queryString = uri.query || '?_=_';
+      for (_i = 0, _len = defaultParams.length; _i < _len; _i++) {
+        p = defaultParams[_i];
+        queryString += "&" + p + "=" + params[p];
+      }
+      nextPageUri = '';
+      if (uri.protocol) {
+        nextPageUri += "" + uri.protocol + "://";
+      }
+      nextPageUri += "" + (String(uri.authority)) + (String(uri.path));
+      nextPageUri += "" + queryString;
+      if (uri.anchor) {
+        nextPageUri += "#" + uri.anchor;
+      }
+      log.debug("Advancing to uri: " + nextPageUri);
+      return this.loadPage(nextPageUri);
     };
     return Splash;
   })();
