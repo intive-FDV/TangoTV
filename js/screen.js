@@ -41,11 +41,12 @@
   Screen = (function() {
     Screen.prototype.widgetAPI = new Common.API.Widget();
     Screen.prototype.tvKey = new Common.API.TVKeyValue();
+    Screen.prototype.listenerId = "keyListener";
     function Screen(fakeBodySelector) {
       this.fakeBodySelector = util.resolveToJqueryIfSelector(fakeBodySelector);
     }
     Screen.prototype.onLoad = function() {
-      this.enableKeys("keyListener");
+      this.enableKeys();
       this.widgetAPI.sendReadyEvent();
       return log.debug("Screen base loaded");
     };
@@ -69,8 +70,8 @@
         return this.hideNavKey();
       }
     };
-    Screen.prototype.enableKeys = function(listenerId) {
-      return $("#" + listenerId).focus();
+    Screen.prototype.enableKeys = function() {
+      return $("#" + this.listenerId).focus();
     };
     Screen.prototype.onKeyDown = function(event) {
       if (!event) {

@@ -294,6 +294,29 @@ class Weather extends HiddableContent
         # TODO Make keys configurable
         @keyHandler = {}
 
+class IMEInput extends HiddableContent
+
+    show: ->
+        super.show()
+        TangoTV.adaptInput
+            input: @input
+            onReady: =>
+                @input.focus()
+            extraKeys: @keyHandler
+
+
+    getContainer: -> @container
+
+    constructor: (config) ->
+        @container = $(config.containerSelector)
+
+        @container.append """
+            Enter some text: <input id="text-input" type="text"></input>
+        """
+        @input = $("#text-input")
+
+        @keyHandler = {}
+
 # "Dashboard" is just an arbitrary name for the first interactive screen
 class Dashboard extends TangoTV.Screen
 
@@ -322,6 +345,9 @@ class Dashboard extends TangoTV.Screen
                 }, {
                     html: 'Weather'
                     callback: => @show @weather
+                }, {
+                    html: 'Text Input'
+                    callback: => @show @imeInput
                 }
             ]
         )
@@ -360,6 +386,15 @@ class Dashboard extends TangoTV.Screen
                     country: "Argentina"
         )
         addReturnKey(@weather.keyHandler)
+
+        @imeInput = new IMEInput(
+            containerSelector: "#ime-container"
+        )
+        #@imeInput.keyHandler[88] = =>
+        @imeInput.keyHandler[tvKey.KEY_RETURN] = =>
+            @setKeyHandler @menu.keyHandler
+            @enableKeys()
+            return false
 
         @setKeyHandler @menu.keyHandler
 

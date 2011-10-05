@@ -1,5 +1,5 @@
 (function() {
-  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, ScrollerPane, Video, Weather, tvKey;
+  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, IMEInput, ScrollerPane, Video, Weather, tvKey;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -346,6 +346,29 @@
     }
     return Weather;
   })();
+  IMEInput = (function() {
+    __extends(IMEInput, HiddableContent);
+    IMEInput.prototype.show = function() {
+      IMEInput.__super__.show.apply(this, arguments).show();
+      return TangoTV.adaptInput({
+        input: this.input,
+        onReady: __bind(function() {
+          return this.input.focus();
+        }, this),
+        extraKeys: this.keyHandler
+      });
+    };
+    IMEInput.prototype.getContainer = function() {
+      return this.container;
+    };
+    function IMEInput(config) {
+      this.container = $(config.containerSelector);
+      this.container.append("Enter some text: <input id=\"text-input\" type=\"text\"></input>");
+      this.input = $("#text-input");
+      this.keyHandler = {};
+    }
+    return IMEInput;
+  })();
   Dashboard = (function() {
     __extends(Dashboard, TangoTV.Screen);
     function Dashboard() {
@@ -390,6 +413,11 @@
             callback: __bind(function() {
               return this.show(this.weather);
             }, this)
+          }, {
+            html: 'Text Input',
+            callback: __bind(function() {
+              return this.show(this.imeInput);
+            }, this)
           }
         ]
       });
@@ -429,6 +457,16 @@
         }
       });
       addReturnKey(this.weather.keyHandler);
+      this.imeInput = new IMEInput({
+        containerSelector: "#ime-container"
+      });
+      this.imeInput.keyHandler[tvKey.KEY_RETURN] = __bind(function() {
+        log.debug("Return key pressed");
+        this.setKeyHandler(this.menu.keyHandler);
+        this.enableKeys();
+        log.debug("...in vain");
+        return false;
+      }, this);
       this.setKeyHandler(this.menu.keyHandler);
       log.debug("Dashboard loaded");
       return Dashboard.__super__.onLoad.call(this);

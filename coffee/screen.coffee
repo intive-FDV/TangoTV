@@ -52,11 +52,13 @@ class Screen
     widgetAPI: new Common.API.Widget()
     tvKey: new Common.API.TVKeyValue()
 
+    listenerId: "keyListener"
+
     constructor: (fakeBodySelector) ->
         @fakeBodySelector = util.resolveToJqueryIfSelector(fakeBodySelector)
 
     onLoad: ->
-        @enableKeys("keyListener")
+        @enableKeys()
         @widgetAPI.sendReadyEvent()
         log.debug "Screen base loaded"
 
@@ -72,8 +74,8 @@ class Screen
             @hideNavKey()
 
     # TODO Add listener anchor programmatically
-    enableKeys: (listenerId) ->
-        $("##{listenerId}").focus()
+    enableKeys: ->
+        $("##{@listenerId}").focus()
     
     onKeyDown: (event) ->
         event = window.event if !event
