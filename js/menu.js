@@ -5,7 +5,7 @@
     /*
         Configuration options:
     
-        containerSelector: CSS selector for the <ul> element to add <li>'s to
+        containerSelector: CSS selector for the element to add items (children) to
         options: List of menu items, each an object with "html" and "callback" properties
             html: the innerHTML of the generated li element,
             callback: function called when the ENTER key is pressed on the remote
@@ -14,23 +14,36 @@
             the last element (and the last item when going backwards from the
             first one) or not
         selected: index of the initially selected option. Defaults to 0
-        
+        itemTemplate: function that builds a menu item returning a HTML string of such,
+            recieves a HTML string with the content of the item and a list of CSS classes
     
         Currently, the menu items can only be selected through the UP and DOWN keys
     
         The keyHandler can be publicly accesed in order to override/add behaviour
-        */    Menu.prototype.selected = 0;
+        */    Menu.prototype.config = {
+      itemTemplate: function(content, classes, index) {
+        var classString, klass, _i, _len;
+        classString = '';
+        for (_i = 0, _len = classes.length; _i < _len; _i++) {
+          klass = classes[_i];
+          classString += "" + klass + " ";
+        }
+        return "<li class=\"" + classString + "\">\n    " + content + "\n</li>";
+      }
+    };
+    Menu.prototype.selected = 0;
     Menu.prototype.focusedClass = "menu-focused";
     Menu.prototype.openClass = "menu-item-open";
     Menu.prototype.selectedClass = "menu-item-selected";
     Menu.prototype.unselectedClass = "menu-item-unselected";
     Menu.prototype.createItems = function() {
-      var evenness, index, _ref;
+      var classes, evenness, index, _ref;
       evenness = ["odd", "even"];
       for (index = 0, _ref = this.options.length; 0 <= _ref ? index < _ref : index > _ref; 0 <= _ref ? index++ : index--) {
-        this.container.append($("<li class=\"" + this.unselectedClass + " " + evenness[index % 2] + "\">" + this.options[index].html + "</li>"));
+        classes = [this.unselectedClass, "" + evenness[index % 2]];
+        this.container.append($(this.config.itemTemplate(this.options[index].html, classes, index)));
       }
-      this.items = this.container.find("li");
+      this.items = this.container.find("." + this.unselectedClass);
       return this.selectItem(this.selected);
     };
     Menu.prototype.selectItem = function(index) {
@@ -46,17 +59,18 @@
     };
     function Menu(config) {
       var tvKey, _ref, _ref2;
-      this.options = config.options;
-      this.container = $(config.containerSelector);
-      if (config.selected != null) {
-        this.selected = config.selected;
+      $.extend(true, this.config, config);
+      this.options = this.config.options;
+      this.container = $(this.config.containerSelector);
+      if (this.config.selected != null) {
+        this.selected = this.config.selected;
       }
-      if (config.continuous) {
-        this.preFirst = ((_ref = config.options) != null ? _ref.length : void 0) - 1;
+      if (this.config.continuous) {
+        this.preFirst = ((_ref = this.config.options) != null ? _ref.length : void 0) - 1;
         this.postLast = 0;
       } else {
         this.preFirst = 0;
-        this.postLast = ((_ref2 = config.options) != null ? _ref2.length : void 0) - 1;
+        this.postLast = ((_ref2 = this.config.options) != null ? _ref2.length : void 0) - 1;
       }
       this.keyHandler = {
         focus: __bind(function() {

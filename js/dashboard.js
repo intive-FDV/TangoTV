@@ -461,10 +461,8 @@
         containerSelector: "#ime-container"
       });
       this.imeInput.keyHandler[tvKey.KEY_RETURN] = __bind(function() {
-        log.debug("Return key pressed");
         this.setKeyHandler(this.menu.keyHandler);
         this.enableKeys();
-        log.debug("...in vain");
         return false;
       }, this);
       this.setKeyHandler(this.menu.keyHandler);
