@@ -302,6 +302,8 @@ class IMEInput extends HiddableContent
             input: @input
             onReady: =>
                 @input.focus()
+            onAnyKey: =>
+                log.debug "Entered: #{@input.val()}"
             extraKeys: @keyHandler
 
 

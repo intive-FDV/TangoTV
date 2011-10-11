@@ -355,6 +355,9 @@
         onReady: __bind(function() {
           return this.input.focus();
         }, this),
+        onAnyKey: __bind(function() {
+          return log.debug("Entered: " + (this.input.val()));
+        }, this),
         extraKeys: this.keyHandler
       });
     };
