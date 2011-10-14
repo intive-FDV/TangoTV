@@ -12,6 +12,12 @@
     deepCopy: function(object) {
       return $.extend(true, {}, object);
     },
+    generateRandomId: function(prefix) {
+      if (prefix == null) {
+        prefix = '';
+      }
+      return "__" + prefix + "_" + (Math.floor(Math.random() * 88888));
+    },
     resolveToJqueryIfSelector: function(object) {
       if (typeof object === TangoTV.util.STRING_TYPENAME) {
         return $(object);

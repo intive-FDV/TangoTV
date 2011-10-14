@@ -1,5 +1,5 @@
 (function() {
-  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, IMEInput, ScrollerPane, Video, Weather, tvKey;
+  var Calculator, ColorChanger, Dashboard, HiddableContent, Html5VideoPlayer, IMEInput, ScrollerPane, Video, Weather, YouTube, tvKey;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -346,6 +346,27 @@
     }
     return Weather;
   })();
+  YouTube = (function() {
+    __extends(YouTube, HiddableContent);
+    YouTube.prototype.getContainer = function() {
+      return this.container;
+    };
+    function YouTube(config) {
+      this.container = TangoTV.util.resolveToJqueryIfSelector(config.container);
+      this.player = new TangoTV.YouTubePlayer({
+        container: this.container,
+        videoId: 'FAYGHTqPMA8'
+      });
+      this.keyHandler = {};
+      this.keyHandler[tvKey.KEY_PLAY] = __bind(function() {
+        return this.player.play();
+      }, this);
+      this.keyHandler[tvKey.KEY_PAUSE] = __bind(function() {
+        return this.player.pause();
+      }, this);
+    }
+    return YouTube;
+  })();
   IMEInput = (function() {
     __extends(IMEInput, HiddableContent);
     IMEInput.prototype.show = function() {
@@ -407,9 +428,9 @@
               return this.show(this.scroller);
             }, this)
           }, {
-            html: 'Video',
+            html: 'YouTube',
             callback: __bind(function() {
-              return this.show(this.videoPlayer);
+              return this.show(this.youtube);
             }, this)
           }, {
             html: 'Weather',
@@ -440,15 +461,10 @@
       addReturnKey(this.scroller.keyHandler);
       this.html5Player = new Html5VideoPlayer("#html5-video-container", "#html5-video");
       addReturnKey(this.html5Player.keyHandler);
-      this.videoPlayer = new Video({
-        containerSelector: "#video-container",
-        placeholderSelector: "#video-player",
-        fullPhSelector: "#fullscreen-placeholder",
-        playerConfig: {
-          url: "D:/Workspaces/samsung-tv/app-template/resource/video/movie.mp4"
-        }
+      this.youtube = new YouTube({
+        container: '#youtube-container'
       });
-      addReturnKey(this.videoPlayer.keyHandler);
+      addReturnKey(this.youtube.keyHandler);
       this.weather = new Weather({
         containerSelector: "#weather-container",
         forecastConfig: {

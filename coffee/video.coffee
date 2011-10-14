@@ -144,3 +144,53 @@ window.setTottalBuffer = (buffer) -> log.trace "setTottalBuffer #{buffer}"
 window.setCurBuffer = (buffer) -> log.trace "setCurBuffer #{buffer}"
 window.onServerError = -> log.trace "onServerError"
 window.onNetworkDisconnected = -> log.error "Network Error!"
+
+#########################################################################################
+
+class TangoTV.YouTubePlayer
+
+    defaultConfig =
+        autohide: true
+        autoplay: false
+        allowFullScreen: true
+        width: 640
+        height: 390
+
+    constructor: (config) ->
+        @config = $.extend(true, {}, defaultConfig, config)
+        @container = TangoTV.util.resolveToJqueryIfSelector(@config.container)
+
+        @config.autohide = if @config.autohide then 1 else 0
+        @config.autoplay = if @config.autoplay then 1 else 0
+
+        elementId = TangoTV.util.generateRandomId('youtube')
+
+        @container.get(0).innerHTML = youtubeTemplate(
+            elementId: elementId
+            videoId: @config.videoId
+            autohide: if @config.autohide then 1 else 0
+            allowFullScreen: @config.allowFullScreen
+            width: @config.width
+            height: @config.height
+        )
+
+        @player = $("##{elementId}").get(0)
+
+    play: ->
+        @player.playVideo()
+
+    pause: ->
+        @player.pauseVideo()
+
+youtubeTemplate = (p) ->
+    """
+    <object
+            id='#{p.elementId}' class='embed'
+            type='application/x-shockwave-flash'
+            data='http://www.youtube.com/v/#{p.videoId}?autohide=#{p.autohide}&enablejsapi=1&playerapiid=#{p.elementId}&showinfo=0'
+            style="height: #{p.height}px; width: #{p.width}px">
+
+        <param name="allowFullScreen" value="#{p.allowFullScreen}">
+        <param name="allowScriptAccess" value="always">
+    </object>
+    """

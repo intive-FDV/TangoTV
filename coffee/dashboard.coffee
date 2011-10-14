@@ -291,8 +291,25 @@ class Weather extends HiddableContent
         )
         @forecast = new TangoTV.Forecast(config.forecastConfig)
 
-        # TODO Make keys configurable
         @keyHandler = {}
+
+class YouTube extends HiddableContent
+
+    getContainer: -> @container
+
+    constructor: (config) ->
+        @container = TangoTV.util.resolveToJqueryIfSelector(config.container)
+        @player =  new TangoTV.YouTubePlayer(
+            container: @container
+            videoId: 'FAYGHTqPMA8'
+        )
+
+        @keyHandler = {}
+        @keyHandler[tvKey.KEY_PLAY] = =>
+            @player.play()
+        @keyHandler[tvKey.KEY_PAUSE] = =>
+            @player.pause()
+
 
 class IMEInput extends HiddableContent
 
@@ -305,7 +322,6 @@ class IMEInput extends HiddableContent
             onAnyKey: =>
                 log.debug "Entered: #{@input.val()}"
             extraKeys: @keyHandler
-
 
     getContainer: -> @container
 
@@ -342,8 +358,11 @@ class Dashboard extends TangoTV.Screen
                     html: 'Scroller'
                     callback: => @show @scroller
                 }, {
-                    html: 'Video'
-                    callback: => @show @videoPlayer
+                #    html: 'Video'
+                #    callback: => @show @videoPlayer
+                #}, {
+                    html: 'YouTube'
+                    callback: => @show @youtube
                 }, {
                     html: 'Weather'
                     callback: => @show @weather
@@ -370,14 +389,19 @@ class Dashboard extends TangoTV.Screen
         @html5Player = new Html5VideoPlayer("#html5-video-container", "#html5-video")
         addReturnKey(@html5Player.keyHandler)
 
-        @videoPlayer = new Video(
-            containerSelector: "#video-container"
-            placeholderSelector: "#video-player"
-            fullPhSelector: "#fullscreen-placeholder"
-            playerConfig:
-                url: "D:/Workspaces/samsung-tv/app-template/resource/video/movie.mp4"
+#        @videoPlayer = new Video(
+#            containerSelector: "#video-container"
+#            placeholderSelector: "#video-player"
+#            fullPhSelector: "#fullscreen-placeholder"
+#            playerConfig:
+#                url: "D:/Workspaces/samsung-tv/app-template/resource/video/movie.mp4"
+#        )
+#        addReturnKey(@videoPlayer.keyHandler)
+
+        @youtube = new YouTube(
+            container: '#youtube-container'
         )
-        addReturnKey(@videoPlayer.keyHandler)
+        addReturnKey(@youtube.keyHandler)
 
         @weather = new Weather(
             containerSelector: "#weather-container"

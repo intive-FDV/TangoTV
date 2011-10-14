@@ -11,6 +11,9 @@ TangoTV.util =
     deepCopy: (object) ->
         $.extend(true, {}, object)
 
+    generateRandomId: (prefix = '') ->
+        "__#{prefix}_#{Math.floor Math.random() * 88888}" # Why 88888? I like it!
+
     resolveToJqueryIfSelector: (object) ->
         if typeof object == TangoTV.util.STRING_TYPENAME
             return $(object)

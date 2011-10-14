@@ -1,5 +1,5 @@
 (function() {
-  var PAUSED, PLAYING, STOPPED;
+  var PAUSED, PLAYING, STOPPED, youtubeTemplate;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   STOPPED = 0;
   PLAYING = 1;
@@ -185,5 +185,42 @@
   };
   window.onNetworkDisconnected = function() {
     return log.error("Network Error!");
+  };
+  TangoTV.YouTubePlayer = (function() {
+    var defaultConfig;
+    defaultConfig = {
+      autohide: true,
+      autoplay: false,
+      allowFullScreen: true,
+      width: 640,
+      height: 390
+    };
+    function YouTubePlayer(config) {
+      var elementId;
+      this.config = $.extend(true, {}, defaultConfig, config);
+      this.container = TangoTV.util.resolveToJqueryIfSelector(this.config.container);
+      this.config.autohide = this.config.autohide ? 1 : 0;
+      this.config.autoplay = this.config.autoplay ? 1 : 0;
+      elementId = TangoTV.util.generateRandomId('youtube');
+      this.container.get(0).innerHTML = youtubeTemplate({
+        elementId: elementId,
+        videoId: this.config.videoId,
+        autohide: this.config.autohide ? 1 : 0,
+        allowFullScreen: this.config.allowFullScreen,
+        width: this.config.width,
+        height: this.config.height
+      });
+      this.player = $("#" + elementId).get(0);
+    }
+    YouTubePlayer.prototype.play = function() {
+      return this.player.playVideo();
+    };
+    YouTubePlayer.prototype.pause = function() {
+      return this.player.pauseVideo();
+    };
+    return YouTubePlayer;
+  })();
+  youtubeTemplate = function(p) {
+    return "<object\n        id='" + p.elementId + "' class='embed'\n        type='application/x-shockwave-flash'\n        data='http://www.youtube.com/v/" + p.videoId + "?autohide=" + p.autohide + "&enablejsapi=1&playerapiid=" + p.elementId + "&showinfo=0'\n        style=\"height: " + p.height + "px; width: " + p.width + "px\">\n\n    <param name=\"allowFullScreen\" value=\"" + p.allowFullScreen + "\">\n    <param name=\"allowScriptAccess\" value=\"always\">\n</object>";
   };
 }).call(this);
