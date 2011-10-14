@@ -6,15 +6,12 @@ defaultConfig =
     onEnter:    undefined # (textValue) ->
     extraKeys: {}
 
-generateRandomId = ->
-    "__input__#{Math.floor Math.random() * 88888}" # Why 88888? I like it!
-
 TangoTV.adaptInput = (config) ->
-    config = $.extend(true, defaultConfig, config)
+    config = $.extend(true, {}, defaultConfig, config)
     input = TangoTV.util.resolveToJqueryIfSelector(config.input)
 
     unless input.attr("id")
-        input.attr("id", generateRandomId())
+        input.attr("id", TangoTV.util.generateRandomId('input'))
     ime = new IMEShell(input.attr("id"), onImeReady(config), config.lang)
     
     log.error "Failed adapting input ##{input.attr("id")}" unless ime

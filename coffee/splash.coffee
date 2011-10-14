@@ -2,11 +2,11 @@ util = TangoTV.util
 
 class Splash extends TangoTV.Screen
 
-    config:
+    defaultConfig =
         timeout: 1000
 
     constructor: (config) ->
-        $.extend(true, @config, config)
+        @config = $.extend(true, {}, defaultConfig, config)
         @container = util.resolveToJqueryIfSelector(@config.container)
         super(@container)
 

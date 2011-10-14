@@ -19,7 +19,7 @@ class Menu
     The keyHandler can be publicly accesed in order to override/add behaviour
     ###
 
-    config:
+    defaultConfig =
         itemTemplate: (content, classes, index) ->
             classString = ''
             for klass in classes
@@ -56,7 +56,7 @@ class Menu
         @options[@selected].callback?()
 
     constructor: (config) ->
-        $.extend(true, @config, config)
+        @config = $.extend(true, {}, defaultConfig, config)
         @options = @config.options
         @container = $(@config.containerSelector)
         @selected = @config.selected if @config.selected?

@@ -20,7 +20,8 @@
         Currently, the menu items can only be selected through the UP and DOWN keys
     
         The keyHandler can be publicly accesed in order to override/add behaviour
-        */    Menu.prototype.config = {
+        */    var defaultConfig;
+    defaultConfig = {
       itemTemplate: function(content, classes, index) {
         var classString, klass, _i, _len;
         classString = '';
@@ -59,7 +60,7 @@
     };
     function Menu(config) {
       var tvKey, _ref, _ref2;
-      $.extend(true, this.config, config);
+      this.config = $.extend(true, {}, defaultConfig, config);
       this.options = this.config.options;
       this.container = $(this.config.containerSelector);
       if (this.config.selected != null) {

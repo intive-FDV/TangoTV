@@ -29,7 +29,7 @@ class TangoTV.Forecast
     MAX_DAYS = 5
     BASE_URL = 'http://free.worldweatheronline.com/feed/weather.ashx?format=json'
 
-    config:
+    defaultConfig =
         days: 5
 
     buildUrl: ->
@@ -65,7 +65,7 @@ class TangoTV.Forecast
             (config.location?.city? or
             (config.location?.lat? and config.location?.lng?) )
 
-        $.extend(true, @config, config)
+        @config = $.extend(true, {}, defaultConfig, config)
 
         @config.days = MIN_DAYS if @config.days < MIN_DAYS
         @config.days = MAX_DAYS if @config.days > MAX_DAYS

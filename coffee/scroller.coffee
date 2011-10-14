@@ -2,7 +2,7 @@ class Scroller
 
     # TODO Use scrollHeight and scrollWidth to get full content size
 
-    config:
+    defaultConfig =
         vStep: 80
         hStep: 40
         bar:
@@ -74,7 +74,7 @@ class Scroller
         )
 
     constructor: (config) ->
-        $.extend(true, @config, config)
+        @config = $.extend(true, {}, defaultConfig, config)
         @element = TangoTV.util.resolveToJqueryIfSelector(@config.element)
         @position = TangoTV.util.deepCopy(@config.position)
 

@@ -10,13 +10,13 @@
   };
   util = TangoTV.util;
   Splash = (function() {
-    var defaultParams;
+    var defaultConfig, defaultParams;
     __extends(Splash, TangoTV.Screen);
-    Splash.prototype.config = {
+    defaultConfig = {
       timeout: 1000
     };
     function Splash(config) {
-      $.extend(true, this.config, config);
+      this.config = $.extend(true, {}, defaultConfig, config);
       this.container = util.resolveToJqueryIfSelector(this.config.container);
       Splash.__super__.constructor.call(this, this.container);
     }

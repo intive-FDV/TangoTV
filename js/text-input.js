@@ -1,5 +1,5 @@
 (function() {
-  var defaultConfig, generateRandomId, onImeReady;
+  var defaultConfig, onImeReady;
   defaultConfig = {
     lang: 'en',
     onReady: void 0,
@@ -8,15 +8,12 @@
     onEnter: void 0,
     extraKeys: {}
   };
-  generateRandomId = function() {
-    return "__input__" + (Math.floor(Math.random() * 88888));
-  };
   TangoTV.adaptInput = function(config) {
     var ime, input;
-    config = $.extend(true, defaultConfig, config);
+    config = $.extend(true, {}, defaultConfig, config);
     input = TangoTV.util.resolveToJqueryIfSelector(config.input);
     if (!input.attr("id")) {
-      input.attr("id", generateRandomId());
+      input.attr("id", TangoTV.util.generateRandomId('input'));
     }
     ime = new IMEShell(input.attr("id"), onImeReady(config), config.lang);
     if (!ime) {

@@ -4,7 +4,7 @@ PAUSED =  2
 
 class TangoTV.VideoPlayer
 
-    cfg:
+    defaultConfig =
         dimensions:
             left:   0
             top:    0
@@ -93,7 +93,7 @@ class TangoTV.VideoPlayer
         @status = STOPPED
         @plugin = $("#pluginPlayer")[0]
 
-        $.extend true, @cfg, config
+        @cfg = $.extend true, {}, defaultConfig, config
 
         if @plugin == null
             log.error "Player plugin not found in page"

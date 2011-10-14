@@ -5,7 +5,8 @@
   PLAYING = 1;
   PAUSED = 2;
   TangoTV.VideoPlayer = (function() {
-    VideoPlayer.prototype.cfg = {
+    var defaultConfig;
+    defaultConfig = {
       dimensions: {
         left: 0,
         top: 0,
@@ -97,7 +98,7 @@
     function VideoPlayer(config) {
       this.status = STOPPED;
       this.plugin = $("#pluginPlayer")[0];
-      $.extend(true, this.cfg, config);
+      this.cfg = $.extend(true, {}, defaultConfig, config);
       if (this.plugin === null) {
         log.error("Player plugin not found in page");
         return;

@@ -1,7 +1,8 @@
 (function() {
   var Scroller;
   Scroller = (function() {
-    Scroller.prototype.config = {
+    var defaultConfig;
+    defaultConfig = {
       vStep: 80,
       hStep: 40,
       bar: {
@@ -80,7 +81,7 @@
       });
     };
     function Scroller(config) {
-      $.extend(true, this.config, config);
+      this.config = $.extend(true, {}, defaultConfig, config);
       this.element = TangoTV.util.resolveToJqueryIfSelector(this.config.element);
       this.position = TangoTV.util.deepCopy(this.config.position);
       this.createBar();
