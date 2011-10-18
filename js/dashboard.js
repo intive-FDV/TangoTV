@@ -355,7 +355,8 @@
       this.container = TangoTV.util.resolveToJqueryIfSelector(config.container);
       this.player = new TangoTV.YouTubePlayer({
         container: this.container,
-        videoId: 'FAYGHTqPMA8'
+        videoId: 'FAYGHTqPMA8',
+        autohide: false
       });
       this.keyHandler = {};
       this.keyHandler[tvKey.KEY_PLAY] = __bind(function() {
@@ -363,6 +364,15 @@
       }, this);
       this.keyHandler[tvKey.KEY_PAUSE] = __bind(function() {
         return this.player.pause();
+      }, this);
+      this.keyHandler[tvKey.KEY_STOP] = __bind(function() {
+        return this.player.stop();
+      }, this);
+      this.keyHandler[tvKey.KEY_FF] = __bind(function() {
+        return this.player.seek(1);
+      }, this);
+      this.keyHandler[tvKey.KEY_RW] = __bind(function() {
+        return this.player.seek(-1);
       }, this);
     }
     return YouTube;

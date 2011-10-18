@@ -1,5 +1,5 @@
 (function() {
-  var TangoTV, log;
+  var TangoTV, limit, log;
   TangoTV = {};
   TangoTV.css = {
     switchClasses: function($element, removed, added) {
@@ -7,10 +7,26 @@
       return $element.addClass(added);
     }
   };
+  limit = function(func, wait, debounce) {};
   TangoTV.util = {
     STRING_TYPENAME: "string",
     deepCopy: function(object) {
       return $.extend(true, {}, object);
+    },
+    debounce: function(func, wait) {
+      var timeout;
+      timeout = {};
+      return function() {
+        var args, context, throttler;
+        context = this;
+        args = arguments;
+        throttler = function() {
+          timeout = null;
+          return func.apply(context, args);
+        };
+        clearTimeout(timeout);
+        return timeout = setTimeout(throttler, wait);
+      };
     },
     generateRandomId: function(prefix) {
       if (prefix == null) {

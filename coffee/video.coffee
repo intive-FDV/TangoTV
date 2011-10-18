@@ -1,3 +1,5 @@
+util = TangoTV.util
+
 STOPPED = 0
 PLAYING = 1
 PAUSED =  2
@@ -158,12 +160,15 @@ class TangoTV.YouTubePlayer
 
     constructor: (config) ->
         @config = $.extend(true, {}, defaultConfig, config)
-        @container = TangoTV.util.resolveToJqueryIfSelector(@config.container)
+        @container = util.resolveToJqueryIfSelector(@config.container)
 
         @config.autohide = if @config.autohide then 1 else 0
         @config.autoplay = if @config.autoplay then 1 else 0
 
-        elementId = TangoTV.util.generateRandomId('youtube')
+        elementId = util.generateRandomId('youtube')
+
+        # Unfortuntely, YouTube uses global functions too... (see below)
+        youtubePlayers[elementId] = this
 
         @container.get(0).innerHTML = youtubeTemplate(
             elementId: elementId
@@ -174,13 +179,31 @@ class TangoTV.YouTubePlayer
             height: @config.height
         )
 
+        seek = (secs = 5) =>
+            @player.seekTo(@player.getCurrentTime() + secs, true) if @player.getPlayerState() in [1, 2]
+        @seek = util.debounce(seek, 250)
+
+    onReady: (elementId) ->
         @player = $("##{elementId}").get(0)
+        @config.onReady?()
+
+    load: (videoId) ->
+        @player?.cueVideoById(videoId)
 
     play: ->
-        @player.playVideo()
+        @player?.playVideo()
 
     pause: ->
-        @player.pauseVideo()
+        @player?.pauseVideo()
+
+    stop: ->
+        @player?.stopVideo()
+        
+
+youtubePlayers = {}
+window.onYouTubePlayerReady = (playerId) ->
+    playerId = unescape(playerId)
+    youtubePlayers[playerId].onReady(playerId)
 
 youtubeTemplate = (p) ->
     """

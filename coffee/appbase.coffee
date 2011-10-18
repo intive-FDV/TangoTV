@@ -5,11 +5,26 @@ TangoTV.css =
         $element.removeClass removed
         $element.addClass added
 
+limit = (func, wait, debounce) ->
+
+
 TangoTV.util =
     STRING_TYPENAME: "string"
 
     deepCopy: (object) ->
         $.extend(true, {}, object)
+
+    debounce: (func, wait) ->
+        timeout = {}
+        return ->
+            context = this
+            args = arguments
+            throttler = ->
+                timeout = null
+                func.apply(context, args)
+
+            clearTimeout(timeout)
+            timeout = setTimeout(throttler, wait)
 
     generateRandomId: (prefix = '') ->
         "__#{prefix}_#{Math.floor Math.random() * 88888}" # Why 88888? I like it!

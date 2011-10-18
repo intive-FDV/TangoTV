@@ -63,7 +63,7 @@ body {
       text-shadow: black 1px 1px;
       background: #aaaaaa; }
     .content .menu .menu-item-open {
-      padding: 4px 0px 4px 9px; }
+      padding: 5px 1px 5px 10px; }
   .content .main-content {
     font-family: monospace;
     position: absolute;

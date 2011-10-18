@@ -45,7 +45,7 @@
       if (!((config.wwoApiKey != null) && ((((_ref = config.location) != null ? _ref.city : void 0) != null) || ((((_ref2 = config.location) != null ? _ref2.lat : void 0) != null) && (((_ref3 = config.location) != null ? _ref3.lng : void 0) != null))))) {
         return typeof (_base = this.config).error === "function" ? _base.error("Invalid options") : void 0;
       }
-      this.config = $.extend(true, defaultConfig, config);
+      this.config = $.extend(true, {}, defaultConfig, config);
       if (this.config.days < MIN_DAYS) {
         this.config.days = MIN_DAYS;
       }

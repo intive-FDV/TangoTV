@@ -302,6 +302,7 @@ class YouTube extends HiddableContent
         @player =  new TangoTV.YouTubePlayer(
             container: @container
             videoId: 'FAYGHTqPMA8'
+            autohide: false
         )
 
         @keyHandler = {}
@@ -309,6 +310,12 @@ class YouTube extends HiddableContent
             @player.play()
         @keyHandler[tvKey.KEY_PAUSE] = =>
             @player.pause()
+        @keyHandler[tvKey.KEY_STOP] = =>
+            @player.stop()
+        @keyHandler[tvKey.KEY_FF] = =>
+            @player.seek(1)
+        @keyHandler[tvKey.KEY_RW] = =>
+            @player.seek(-1)
 
 
 class IMEInput extends HiddableContent

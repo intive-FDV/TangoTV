@@ -1,6 +1,7 @@
 (function() {
-  var PAUSED, PLAYING, STOPPED, youtubeTemplate;
+  var PAUSED, PLAYING, STOPPED, util, youtubePlayers, youtubeTemplate;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  util = TangoTV.util;
   STOPPED = 0;
   PLAYING = 1;
   PAUSED = 2;
@@ -196,12 +197,13 @@
       height: 390
     };
     function YouTubePlayer(config) {
-      var elementId;
+      var elementId, seek;
       this.config = $.extend(true, {}, defaultConfig, config);
-      this.container = TangoTV.util.resolveToJqueryIfSelector(this.config.container);
+      this.container = util.resolveToJqueryIfSelector(this.config.container);
       this.config.autohide = this.config.autohide ? 1 : 0;
       this.config.autoplay = this.config.autoplay ? 1 : 0;
-      elementId = TangoTV.util.generateRandomId('youtube');
+      elementId = util.generateRandomId('youtube');
+      youtubePlayers[elementId] = this;
       this.container.get(0).innerHTML = youtubeTemplate({
         elementId: elementId,
         videoId: this.config.videoId,
@@ -210,16 +212,45 @@
         width: this.config.width,
         height: this.config.height
       });
-      this.player = $("#" + elementId).get(0);
+      seek = __bind(function(secs) {
+        var _ref;
+        if (secs == null) {
+          secs = 5;
+        }
+        if ((_ref = this.player.getPlayerState()) === 1 || _ref === 2) {
+          return this.player.seekTo(this.player.getCurrentTime() + secs, true);
+        }
+      }, this);
+      this.seek = util.debounce(seek, 250);
     }
+    YouTubePlayer.prototype.onReady = function(elementId) {
+      var _base;
+      this.player = $("#" + elementId).get(0);
+      return typeof (_base = this.config).onReady === "function" ? _base.onReady() : void 0;
+    };
+    YouTubePlayer.prototype.load = function(videoId) {
+      var _ref;
+      return (_ref = this.player) != null ? _ref.cueVideoById(videoId) : void 0;
+    };
     YouTubePlayer.prototype.play = function() {
-      return this.player.playVideo();
+      var _ref;
+      return (_ref = this.player) != null ? _ref.playVideo() : void 0;
     };
     YouTubePlayer.prototype.pause = function() {
-      return this.player.pauseVideo();
+      var _ref;
+      return (_ref = this.player) != null ? _ref.pauseVideo() : void 0;
+    };
+    YouTubePlayer.prototype.stop = function() {
+      var _ref;
+      return (_ref = this.player) != null ? _ref.stopVideo() : void 0;
     };
     return YouTubePlayer;
   })();
+  youtubePlayers = {};
+  window.onYouTubePlayerReady = function(playerId) {
+    playerId = unescape(playerId);
+    return youtubePlayers[playerId].onReady(playerId);
+  };
   youtubeTemplate = function(p) {
     return "<object\n        id='" + p.elementId + "' class='embed'\n        type='application/x-shockwave-flash'\n        data='http://www.youtube.com/v/" + p.videoId + "?autohide=" + p.autohide + "&enablejsapi=1&playerapiid=" + p.elementId + "&showinfo=0'\n        style=\"height: " + p.height + "px; width: " + p.width + "px\">\n\n    <param name=\"allowFullScreen\" value=\"" + p.allowFullScreen + "\">\n    <param name=\"allowScriptAccess\" value=\"always\">\n</object>";
   };
