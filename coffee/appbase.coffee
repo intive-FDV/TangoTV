@@ -41,6 +41,13 @@ TangoTV.util =
         script.onload = onLoad
         document.getElementsByTagName('head')[0].appendChild(script)
 
+    loadCss: (path) ->
+        link = $('<link></link>')
+        link.attr('rel','stylesheet')
+        link.attr('type', 'text/css')
+        link.attr('href', path)
+        $('head').append(link)
+
     queryStringParams: (query = window.location.search, acceptEmptyParams = false) ->
         paramMap = {}
         # Trim the "?" if present

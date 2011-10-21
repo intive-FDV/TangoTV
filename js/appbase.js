@@ -51,6 +51,14 @@
       script.onload = onLoad;
       return document.getElementsByTagName('head')[0].appendChild(script);
     },
+    loadCss: function(path) {
+      var link;
+      link = $('<link></link>');
+      link.attr('rel', 'stylesheet');
+      link.attr('type', 'text/css');
+      link.attr('href', path);
+      return $('head').append(link);
+    },
     queryStringParams: function(query, acceptEmptyParams) {
       var eqPos, param, paramMap, params, _i, _len;
       if (query == null) {
