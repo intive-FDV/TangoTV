@@ -15,6 +15,7 @@
     if (!input.attr("id")) {
       input.attr("id", TangoTV.util.generateRandomId('input'));
     }
+    input.wrap("<div>").parent().html();
     ime = new IMEShell(input.attr("id"), onImeReady(config), config.lang);
     if (!ime) {
       log.error("Failed adapting input #" + (input.attr("id")));

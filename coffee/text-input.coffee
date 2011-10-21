@@ -12,6 +12,9 @@ TangoTV.adaptInput = (config) ->
 
     unless input.attr("id")
         input.attr("id", TangoTV.util.generateRandomId('input'))
+    # FIXME Without the next line this doesn't work,
+    # probably because of DOM not updating synchronically
+    input.wrap("<div>").parent().html()
     ime = new IMEShell(input.attr("id"), onImeReady(config), config.lang)
     
     log.error "Failed adapting input ##{input.attr("id")}" unless ime

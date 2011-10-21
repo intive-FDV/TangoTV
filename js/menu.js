@@ -5,7 +5,6 @@
     /*
         Configuration options:
     
-        containerSelector: CSS selector for the element to add items (children) to
         options: List of menu items, each an object with "html" and "callback" properties
             html: the innerHTML of the generated li element,
             callback: function called when the ENTER key is pressed on the remote
@@ -37,8 +36,9 @@
     Menu.prototype.openClass = "menu-item-open";
     Menu.prototype.selectedClass = "menu-item-selected";
     Menu.prototype.unselectedClass = "menu-item-unselected";
-    Menu.prototype.createItems = function() {
+    Menu.prototype.drawIn = function(container) {
       var classes, evenness, index, _ref;
+      this.container = TangoTV.util.resolveToJqueryIfSelector(container);
       evenness = ["odd", "even"];
       for (index = 0, _ref = this.options.length; 0 <= _ref ? index < _ref : index > _ref; 0 <= _ref ? index++ : index--) {
         classes = [this.unselectedClass, "" + evenness[index % 2]];
@@ -95,7 +95,6 @@
         "enter": "Select",
         "up-down": "Move"
       };
-      this.createItems();
     }
     Menu.prototype.offset = function(amount) {
       var selected;

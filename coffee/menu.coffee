@@ -2,7 +2,6 @@ class Menu
     ###
     Configuration options:
 
-    containerSelector: CSS selector for the element to add items (children) to
     options: List of menu items, each an object with "html" and "callback" properties
         html: the innerHTML of the generated li element,
         callback: function called when the ENTER key is pressed on the remote
@@ -36,12 +35,12 @@ class Menu
     selectedClass: "menu-item-selected"
     unselectedClass: "menu-item-unselected"
 
-    createItems: ->
+    drawIn: (container) ->
+        @container = TangoTV.util.resolveToJqueryIfSelector(container)
         evenness = ["odd", "even"]
         for index in [0 ... @options.length]
             classes = [@unselectedClass, "#{evenness[index % 2]}"]
             @container.append $(@config.itemTemplate(@options[index].html, classes, index))
-            #@container.append $("<li class=\"#{@unselectedClass} #{evenness[index % 2]}\">#{@options[index].html}</li>")
         @items = @container.find(".#{@unselectedClass}")
         @selectItem(@selected)
 
@@ -85,8 +84,6 @@ class Menu
         @keyHandler.keyRef =
             "enter": "Select"
             "up-down": "Move"
-
-        @createItems()
 
     offset: (amount) ->
         selected = @selected + amount

@@ -420,7 +420,6 @@
     Dashboard.prototype.onLoad = function() {
       var addReturnKey;
       this.menu = new TangoTV.Menu({
-        containerSelector: '.menu',
         options: [
           {
             html: 'Color changer',
@@ -455,6 +454,7 @@
           }
         ]
       });
+      this.menu.drawIn('.menu');
       addReturnKey = __bind(function(keyHandler) {
         keyHandler[this.tvKey.KEY_RETURN] = __bind(function() {
           return this.setKeyHandler(this.menu.keyHandler);

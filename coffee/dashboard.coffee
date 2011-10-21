@@ -353,7 +353,6 @@ class Dashboard extends TangoTV.Screen
 
     onLoad: ->
         @menu = new TangoTV.Menu(
-            containerSelector: '.menu'
             options: [
                 {
                     html: 'Color changer'
@@ -379,6 +378,7 @@ class Dashboard extends TangoTV.Screen
                 }
             ]
         )
+        @menu.drawIn('.menu')
 
         addReturnKey = (keyHandler) =>
             keyHandler[@tvKey.KEY_RETURN] = => @setKeyHandler @menu.keyHandler

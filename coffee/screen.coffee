@@ -54,14 +54,36 @@ class Screen
 
     listenerId: "keyListener"
 
-    constructor: (fakeBodySelector) ->
-        @fakeBodySelector = util.resolveToJqueryIfSelector(fakeBodySelector)
+    constructor: (@body) ->
+        @backstack = []
 
     onLoad: ->
+        @body = util.resolveToJqueryIfSelector(@body)
         @enableKeys()
         @widgetAPI.sendReadyEvent()
-        log.debug "Screen base loaded"
 
+    # Views backstack model
+    drawView: (view) ->
+        @body.empty()
+        view.drawIn(@body)
+
+    openView: (view) ->
+        @currentView?.onUnload?()
+        @currentView = view
+        @currentView?.keyHandler[@tvKey.KEY_RETURN] ?= => @goBack()
+        @setKeyHandler @currentView.keyHandler
+        @drawView(@currentView)
+        @backstack.unshift(@currentView)
+
+    goBack: ->
+        return unless @backstack.length > 1
+        @currentView?.onUnload?()
+        @backstack.shift()
+        @currentView = @backstack[0]
+        @setKeyHandler @currentView?.keyHandler
+        @drawView(@currentView)
+
+    # RC handling
     keyHandler: {}
 
     setKeyHandler: (handler) ->
@@ -87,7 +109,7 @@ class Screen
 
 
     displayNavKey: (keyRef) ->
-        @navKey = new NavKey @fakeBodySelector, keyRef
+        @navKey = new NavKey @body, keyRef
 
     hideNavKey: ->
         @navKey?.hide()
