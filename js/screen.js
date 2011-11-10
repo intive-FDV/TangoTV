@@ -65,13 +65,11 @@
       }
       this.currentView = view;
       if ((_ref2 = this.currentView) != null) {
-                if ((_ref3 = (_base = _ref2.keyHandler)[_name = this.tvKey.KEY_RETURN]) != null) {
-          _ref3;
-        } else {
+        if ((_ref3 = (_base = _ref2.keyHandler)[_name = this.tvKey.KEY_RETURN]) == null) {
           _base[_name] = __bind(function() {
             return this.goBack();
           }, this);
-        };
+        }
       }
       this.setKeyHandler(this.currentView.keyHandler);
       this.drawView(this.currentView);

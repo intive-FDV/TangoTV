@@ -19,7 +19,8 @@
         Currently, the menu items can only be selected through the UP and DOWN keys
     
         The keyHandler can be publicly accesed in order to override/add behaviour
-        */    var defaultConfig;
+        */
+    var defaultConfig;
     defaultConfig = {
       itemTemplate: function(content, classes, index) {
         var classString, klass, _i, _len;

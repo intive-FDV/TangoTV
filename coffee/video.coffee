@@ -149,6 +149,14 @@ window.onNetworkDisconnected = -> log.error "Network Error!"
 
 #########################################################################################
 
+YT_STATE =
+    UNSTARTED:  -1
+    ENDED:       0
+    PLAYING:     1
+    PAUSED:      2
+    BUFFERING:   3
+    CUED:        5
+
 class TangoTV.YouTubePlayer
 
     defaultConfig =
@@ -165,13 +173,13 @@ class TangoTV.YouTubePlayer
         @config.autohide = if @config.autohide then 1 else 0
         @config.autoplay = if @config.autoplay then 1 else 0
 
-        elementId = util.generateRandomId('youtube')
+        @elementId = util.generateRandomId('youtube')
 
         # Unfortuntely, YouTube uses global functions too... (see below)
-        youtubePlayers[elementId] = this
+        youtubePlayers[@elementId] = this
 
         @container.get(0).innerHTML = youtubeTemplate(
-            elementId: elementId
+            elementId: @elementId
             videoId: @config.videoId
             autohide: if @config.autohide then 1 else 0
             allowFullScreen: @config.allowFullScreen
@@ -180,11 +188,41 @@ class TangoTV.YouTubePlayer
         )
 
         seek = (secs = 5) =>
-            @player.seekTo(@player.getCurrentTime() + secs, true) if @player.getPlayerState() in [1, 2]
+            @player.seekTo(@player.getCurrentTime() + secs, true) if @currentState in [YT_STATE.PLAYING, YT_STATE.PAUSED]
         @seek = util.debounce(seek, 250)
 
-    onReady: (elementId) ->
-        @player = $("##{elementId}").get(0)
+        # FIXME onYouTubePlayerReady is not always firing, though player *is* ready
+        # @readinessCheck = setInterval((=> @onReady()), 500)
+
+    playerIsReady: ->
+        player = $("##{@elementId}")
+        player.length and player.get(0).getPlayerState?() in [-1..5]
+
+    stateChanged: (state) ->
+        @currentState = state
+        switch @currentState
+            when YT_STATE.CUED      then @config.onCued?()
+            when YT_STATE.PLAYING   then @config.onPlay?()
+            when YT_STATE.PAUSED    then @config.onPause?()
+            when YT_STATE.BUFFERING then @config.onBuffering?()
+            when YT_STATE.ENDED     then @config.onEnded?()
+
+    addEventListener: ->
+        fnName = util.generateRandomId("youtube_listener_#{@elementId}")
+        window[fnName] = (state) =>
+            @stateChanged(state)
+        fnName
+
+    onReady: ->
+        unless @playerIsReady()
+            log.debug("Player #{@elementId} not yet ready")
+            return
+
+        clearInterval(@readinessCheck)
+        @player = $("##{@elementId}").get(0)
+        log.debug("Player #{@elementId} ready")
+
+        @player.addEventListener('onStateChange', @addEventListener())
         @config.onReady?()
 
     load: (videoId) ->
@@ -198,12 +236,11 @@ class TangoTV.YouTubePlayer
 
     stop: ->
         @player?.stopVideo()
-        
 
 youtubePlayers = {}
 window.onYouTubePlayerReady = (playerId) ->
     playerId = unescape(playerId)
-    youtubePlayers[playerId].onReady(playerId)
+    youtubePlayers[playerId].onReady()
 
 youtubeTemplate = (p) ->
     """

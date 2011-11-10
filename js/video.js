@@ -1,6 +1,11 @@
 (function() {
-  var PAUSED, PLAYING, STOPPED, util, youtubePlayers, youtubeTemplate;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var PAUSED, PLAYING, STOPPED, YT_STATE, util, youtubePlayers, youtubeTemplate;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __indexOf = Array.prototype.indexOf || function(item) {
+    for (var i = 0, l = this.length; i < l; i++) {
+      if (this[i] === item) return i;
+    }
+    return -1;
+  };
   util = TangoTV.util;
   STOPPED = 0;
   PLAYING = 1;
@@ -187,6 +192,14 @@
   window.onNetworkDisconnected = function() {
     return log.error("Network Error!");
   };
+  YT_STATE = {
+    UNSTARTED: -1,
+    ENDED: 0,
+    PLAYING: 1,
+    PAUSED: 2,
+    BUFFERING: 3,
+    CUED: 5
+  };
   TangoTV.YouTubePlayer = (function() {
     var defaultConfig;
     defaultConfig = {
@@ -197,15 +210,15 @@
       height: 390
     };
     function YouTubePlayer(config) {
-      var elementId, seek;
+      var seek;
       this.config = $.extend(true, {}, defaultConfig, config);
       this.container = util.resolveToJqueryIfSelector(this.config.container);
       this.config.autohide = this.config.autohide ? 1 : 0;
       this.config.autoplay = this.config.autoplay ? 1 : 0;
-      elementId = util.generateRandomId('youtube');
-      youtubePlayers[elementId] = this;
+      this.elementId = util.generateRandomId('youtube');
+      youtubePlayers[this.elementId] = this;
       this.container.get(0).innerHTML = youtubeTemplate({
-        elementId: elementId,
+        elementId: this.elementId,
         videoId: this.config.videoId,
         autohide: this.config.autohide ? 1 : 0,
         allowFullScreen: this.config.allowFullScreen,
@@ -217,15 +230,51 @@
         if (secs == null) {
           secs = 5;
         }
-        if ((_ref = this.player.getPlayerState()) === 1 || _ref === 2) {
+        if ((_ref = this.currentState) === YT_STATE.PLAYING || _ref === YT_STATE.PAUSED) {
           return this.player.seekTo(this.player.getCurrentTime() + secs, true);
         }
       }, this);
       this.seek = util.debounce(seek, 250);
     }
-    YouTubePlayer.prototype.onReady = function(elementId) {
+    YouTubePlayer.prototype.playerIsReady = function() {
+      var player, _base, _ref;
+      player = $("#" + this.elementId);
+      return player.length && (_ref = typeof (_base = player.get(0)).getPlayerState === "function" ? _base.getPlayerState() : void 0, __indexOf.call([-1, 0, 1, 2, 3, 4, 5], _ref) >= 0);
+    };
+    YouTubePlayer.prototype.stateChanged = function(state) {
+      var _base, _base2, _base3, _base4, _base5;
+      this.currentState = state;
+      switch (this.currentState) {
+        case YT_STATE.CUED:
+          return typeof (_base = this.config).onCued === "function" ? _base.onCued() : void 0;
+        case YT_STATE.PLAYING:
+          return typeof (_base2 = this.config).onPlay === "function" ? _base2.onPlay() : void 0;
+        case YT_STATE.PAUSED:
+          return typeof (_base3 = this.config).onPause === "function" ? _base3.onPause() : void 0;
+        case YT_STATE.BUFFERING:
+          return typeof (_base4 = this.config).onBuffering === "function" ? _base4.onBuffering() : void 0;
+        case YT_STATE.ENDED:
+          return typeof (_base5 = this.config).onEnded === "function" ? _base5.onEnded() : void 0;
+      }
+    };
+    YouTubePlayer.prototype.addEventListener = function() {
+      var fnName;
+      fnName = util.generateRandomId("youtube_listener_" + this.elementId);
+      window[fnName] = __bind(function(state) {
+        return this.stateChanged(state);
+      }, this);
+      return fnName;
+    };
+    YouTubePlayer.prototype.onReady = function() {
       var _base;
-      this.player = $("#" + elementId).get(0);
+      if (!this.playerIsReady()) {
+        log.debug("Player " + this.elementId + " not yet ready");
+        return;
+      }
+      clearInterval(this.readinessCheck);
+      this.player = $("#" + this.elementId).get(0);
+      log.debug("Player " + this.elementId + " ready");
+      this.player.addEventListener('onStateChange', this.addEventListener());
       return typeof (_base = this.config).onReady === "function" ? _base.onReady() : void 0;
     };
     YouTubePlayer.prototype.load = function(videoId) {
@@ -249,7 +298,7 @@
   youtubePlayers = {};
   window.onYouTubePlayerReady = function(playerId) {
     playerId = unescape(playerId);
-    return youtubePlayers[playerId].onReady(playerId);
+    return youtubePlayers[playerId].onReady();
   };
   youtubeTemplate = function(p) {
     return "<object\n        id='" + p.elementId + "' class='embed'\n        type='application/x-shockwave-flash'\n        data='http://www.youtube.com/v/" + p.videoId + "?autohide=" + p.autohide + "&enablejsapi=1&playerapiid=" + p.elementId + "&showinfo=0'\n        style=\"height: " + p.height + "px; width: " + p.width + "px\">\n\n    <param name=\"allowFullScreen\" value=\"" + p.allowFullScreen + "\">\n    <param name=\"allowScriptAccess\" value=\"always\">\n</object>";
