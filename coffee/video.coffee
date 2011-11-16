@@ -194,7 +194,7 @@ class TangoTV.YouTubePlayer
         # FIXME onYouTubePlayerReady is not always firing, though player *is* ready
         # @readinessCheck = setInterval((=> @onReady()), 500)
 
-    playerIsReady: ->
+    isReady: ->
         player = $("##{@elementId}")
         player.length and player.get(0).getPlayerState?() in [-1..5]
 
@@ -214,7 +214,7 @@ class TangoTV.YouTubePlayer
         fnName
 
     onReady: ->
-        unless @playerIsReady()
+        unless @isReady()
             log.debug("Player #{@elementId} not yet ready")
             return
 
@@ -236,6 +236,9 @@ class TangoTV.YouTubePlayer
 
     stop: ->
         @player?.stopVideo()
+
+    getProgress: ->
+        @player?.getCurrentTime()
 
 youtubePlayers = {}
 window.onYouTubePlayerReady = (playerId) ->
