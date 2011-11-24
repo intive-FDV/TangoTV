@@ -1,8 +1,10 @@
-# MAPLE Font List File
+###################################################################
+#
+#    Maple Font List File
+#
+###################################################################
 
 Font List
-    sans : swansea.ttf
-    sans-serif : swansea.ttf : default
-    serif : bienetresocial.ttf
-    monospace : lib-mono.ttf
-
+	serif	: serif.ttf
+	sans	: sans.ttf : default
+	monospace	: monospace.ttf
