@@ -1,6 +1,11 @@
 (function() {
   var NavKey, Screen, util;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __indexOf = Array.prototype.indexOf || function(item) {
+    for (var i = 0, l = this.length; i < l; i++) {
+      if (this[i] === item) return i;
+    }
+    return -1;
+  };
   util = TangoTV.util;
   NavKey = (function() {
     var AVAILABLE_KEYS, KEY_CLASS, KEY_DESCRIPTION_CLASS, KEY_ICON_CLASS, NAVKEY_CLASS;
@@ -57,7 +62,7 @@
       return view.drawIn(this.body);
     };
     Screen.prototype.openView = function(view) {
-      var _base, _name, _ref, _ref2, _ref3;
+      var _base, _base2, _name, _name2, _ref, _ref2, _ref3, _ref4, _ref5;
       if ((_ref = this.currentView) != null) {
         if (typeof _ref.onUnload === "function") {
           _ref.onUnload();
@@ -71,24 +76,34 @@
           }, this);
         }
       }
+      if ((_ref4 = this.currentView) != null) {
+        if ((_ref5 = (_base2 = _ref4.keyHandler)[_name2 = this.tvKey.KEY_EXIT]) == null) {
+          _base2[_name2] = __bind(function() {
+            return this.exit();
+          }, this);
+        }
+      }
       this.setKeyHandler(this.currentView.keyHandler);
       this.drawView(this.currentView);
       return this.backstack.unshift(this.currentView);
     };
     Screen.prototype.goBack = function() {
       var _ref, _ref2;
-      if (!(this.backstack.length > 1)) {
-        return;
-      }
       if ((_ref = this.currentView) != null) {
         if (typeof _ref.onUnload === "function") {
           _ref.onUnload();
         }
       }
+      if (this.backstack.length === 1) {
+        return this.widgetAPI.sendReturnEvent();
+      }
       this.backstack.shift();
       this.currentView = this.backstack[0];
       this.setKeyHandler((_ref2 = this.currentView) != null ? _ref2.keyHandler : void 0);
       return this.drawView(this.currentView);
+    };
+    Screen.prototype.exit = function() {
+      return this.widgetAPI.sendExitEvent();
     };
     Screen.prototype.keyHandler = {};
     Screen.prototype.setKeyHandler = function(handler) {
@@ -114,10 +129,15 @@
       return $("#" + this.listenerId).focus();
     };
     Screen.prototype.onKeyDown = function(event) {
+      var exitingKeys, _ref;
       if (!event) {
         event = window.event;
       }
       log.trace("Key " + event.keyCode + " pressed");
+      exitingKeys = [this.tvKey.KEY_RETURN, this.tvKey.KEY_EXIT];
+      if ((_ref = event.keyCode, __indexOf.call(exitingKeys, _ref) >= 0) && typeof this.keyHandler[event.keyCode] === "function") {
+        this.widgetAPI.blockNavigation(event);
+      }
       if (typeof this.keyHandler[event.keyCode] === "function") {
         return this.keyHandler[event.keyCode](event);
       } else {

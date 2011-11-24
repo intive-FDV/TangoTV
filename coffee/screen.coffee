@@ -70,18 +70,27 @@ class Screen
     openView: (view) ->
         @currentView?.onUnload?()
         @currentView = view
+
         @currentView?.keyHandler[@tvKey.KEY_RETURN] ?= => @goBack()
+        @currentView?.keyHandler[@tvKey.KEY_EXIT] ?= => @exit()
+
         @setKeyHandler @currentView.keyHandler
         @drawView(@currentView)
         @backstack.unshift(@currentView)
 
     goBack: ->
-        return unless @backstack.length > 1
         @currentView?.onUnload?()
+
+        if @backstack.length == 1
+            return @widgetAPI.sendReturnEvent()
+
         @backstack.shift()
         @currentView = @backstack[0]
         @setKeyHandler @currentView?.keyHandler
         @drawView(@currentView)
+
+    exit: ->
+        @widgetAPI.sendExitEvent()
 
     # RC handling
     keyHandler: {}
@@ -102,6 +111,12 @@ class Screen
     onKeyDown: (event) ->
         event = window.event if !event
         log.trace "Key #{event.keyCode} pressed"
+
+        # Prevent exiting the app when Return or Enter are pressed
+        exitingKeys = [@tvKey.KEY_RETURN, @tvKey.KEY_EXIT]
+        if event.keyCode in exitingKeys and typeof @keyHandler[event.keyCode] == "function"
+            @widgetAPI.blockNavigation(event)
+
         if typeof @keyHandler[event.keyCode] == "function"
             @keyHandler[event.keyCode] event
         else
