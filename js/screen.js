@@ -9,7 +9,7 @@
     KEY_ICON_CLASS = "key-icon";
     KEY_DESCRIPTION_CLASS = "key-desc";
     AVAILABLE_KEYS = ["up-down", "left-right", "enter", "return", "A", "B", "C", "D"];
-    function NavKey(containerSelector, keyRef) {
+    function NavKey(containerSelector) {
       var key, _i, _len;
       $(containerSelector).append($("<div class=\"" + NAVKEY_CLASS + "\">\n</div>"));
       this.mainElem = $("." + NAVKEY_CLASS);
@@ -17,11 +17,16 @@
         key = AVAILABLE_KEYS[_i];
         this.mainElem.append($("<div id=\"nav-" + key + "\" class=\"" + KEY_CLASS + "\">\n    <div class=\"" + KEY_ICON_CLASS + "\"></div>\n    <div class=\"" + KEY_DESCRIPTION_CLASS + "\"></div>\n</div>"));
       }
-      this.hideAllKeys();
-      for (key in keyRef) {
-        this.showKey(key, keyRef[key]);
-      }
     }
+    NavKey.prototype.loadKeys = function(keyRef) {
+      var key, _results;
+      this.hideAllKeys();
+      _results = [];
+      for (key in keyRef) {
+        _results.push(this.showKey(key, keyRef[key]));
+      }
+      return _results;
+    };
     NavKey.prototype.show = function() {
       return this.mainElem.show();
     };
@@ -125,7 +130,12 @@
       }
     };
     Screen.prototype.displayNavKey = function(keyRef) {
-      return this.navKey = new NavKey(this.body, keyRef);
+      var _ref;
+      if ((_ref = this.navKey) == null) {
+        this.navKey = new NavKey(this.body);
+      }
+      this.navKey.loadKeys(keyRef);
+      return this.navKey.show();
     };
     Screen.prototype.hideNavKey = function() {
       var _ref;

@@ -17,7 +17,7 @@ class NavKey
         "D"  # BLUE
     ]
 
-    constructor: (containerSelector, keyRef) ->
+    constructor: (containerSelector) ->
         $(containerSelector).append $("""
             <div class="#{NAVKEY_CLASS}">
             </div>
@@ -30,6 +30,8 @@ class NavKey
                     <div class="#{KEY_DESCRIPTION_CLASS}"></div>
                 </div>
             """)
+
+    loadKeys: (keyRef) ->
         @hideAllKeys()
         for key of keyRef
             @showKey key, keyRef[key]
@@ -109,7 +111,9 @@ class Screen
 
 
     displayNavKey: (keyRef) ->
-        @navKey = new NavKey @body, keyRef
+        @navKey ?= new NavKey @body
+        @navKey.loadKeys keyRef
+        @navKey.show()
 
     hideNavKey: ->
         @navKey?.hide()
