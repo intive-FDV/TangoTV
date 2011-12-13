@@ -342,6 +342,29 @@ class IMEInput extends HiddableContent
 
         @keyHandler = {}
 
+class Carrousel extends HiddableContent        
+
+    constructor: (config)->
+        @container = $(config.containerSelector)
+        @carr = new TangoTV.Carrousel(
+            options: [
+                {
+                    url:"http://www.ifondos.net/wp-content/uploads/2009/09/Simpsons_Bart.jpg"
+                },{
+                    url: "http://www.soygik.com/wp-content/uploads/2007/11/cart0149.jpg"
+                },{
+                    url: "http://www.soygik.com/wp-content/uploads/2007/11/harry-potter-simpsons.jpg"
+                },{
+                    url: "http://www.luigikeynes.com/wp-content/uploads/2010/05/403112.jpg"
+                }
+            ]
+        )
+        @keyHandler = @carr.keyHandler
+        @carr.drawIn(@container)
+    
+    getContainer: -> @container
+
+
 # "Dashboard" is just an arbitrary name for the first interactive screen
 class Dashboard extends TangoTV.Screen
 
@@ -355,6 +378,9 @@ class Dashboard extends TangoTV.Screen
         @menu = new TangoTV.Menu(
             options: [
                 {
+                    html: 'Carrousel'
+                    callback: => @show @carrousel
+                }, {
                     html: 'Color changer'
                     callback: => @show @colorChanger
                 }, {
@@ -429,7 +455,13 @@ class Dashboard extends TangoTV.Screen
             @enableKeys()
             return false
 
+        @carrousel  = new Carrousel(
+                containerSelector: '#carrousel-container'
+        )
+        addReturnKey(@carrousel.keyHandler)
+
         @setKeyHandler @menu.keyHandler
+        
 
         log.debug "Dashboard loaded"
         super()
