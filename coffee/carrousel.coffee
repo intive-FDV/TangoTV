@@ -19,7 +19,8 @@ class Carrousel
     ###
 
     defaultConfig =
-        images: []
+        options: []
+        #keyHandler: {}
         #itemTemplate: (content, classes, index) ->
          #   classString = ''
           #  for klass in classes
@@ -39,6 +40,8 @@ class Carrousel
 
     drawIn: (container) ->
         @container = TangoTV.util.resolveToJqueryIfSelector(container)
+        @container.append("<img class='main-image' style='height: 50%'>")
+       # @menu.openSelectedItem()
         @menu.drawIn(container)
 
     #selectItem: (index) ->
@@ -51,30 +54,35 @@ class Carrousel
         #$(@items[@selected]).addClass(@openClass)
         #@options[@selected].callback?()
 
-    showSelectedImage: (img) ->
-        @container.append $(img.html)     
+   # showSelectedImage: (img) ->
+    #    @container.append $(img.html) 
+    
+    showImage: (image) ->
+        @container.find(".main-image").attr("src", image.url)
 
     constructor: (config) ->
 
         @config = $.extend(true, {}, defaultConfig, config)
 
         @options = @config.options
-        
+
+
         #@keyHandler.keyRef =
          #   "enter": "Select"
-          #  "left-rigth": "Move"
+         #   "left-rigth": "Move"
         # Cada imagen es un objeto como {url: 'http://hector.jpg.to', thumbnailUrl: 'http://pequenio-hector.jpg.to'}
-        
-        thumbnailFor = (image) ->
-            {
-                html: "<img src='#{image.url}' style='height=10%'>"
-                callback: ->
-            }
+
+        thumbnailFor = (image) =>
+                html: "<img src='#{image.url}' style='height: 10%'>"
+                callback: =>
+                    log.debug "@showImage: #{typeof @showImage}"
+                    @showImage image
 
         @menu = new TangoTV.Menu(
                 options: thumbnailFor(image) for image in @options
         )
 
+        s
         @keyHandler = @menu.keyHandler
 
         # Pasarle parametros "selected" y "continuous" al menu del carrousel        

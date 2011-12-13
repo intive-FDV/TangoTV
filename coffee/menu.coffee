@@ -53,6 +53,7 @@ class Menu
         @container.find(".#{@openClass}").removeClass(@openClass)
         $(@items[@selected]).addClass(@openClass)
         @options[@selected].callback?()
+    
 
     constructor: (config) ->
         @config = $.extend(true, {}, defaultConfig, config)
