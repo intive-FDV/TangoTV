@@ -40,9 +40,10 @@ class Carrousel
 
     drawIn: (container) ->
         @container = TangoTV.util.resolveToJqueryIfSelector(container)
-        @container.append("<img class='main-image' style='height: 50%'>")
+        @container.append("<FRAMESET><div class='panel-image-carrousel'><img class='main-image'> </div><div class='menu-carrousel'></div></FRAMESET>")
        # @menu.openSelectedItem()
-        @menu.drawIn(container)
+        @menu.drawIn('.menu-carrousel')
+        @menu.openSelectedItem()
 
     #selectItem: (index) ->
         #TangoTV.css.switchClasses $(@items[@selected]), @selectedClass, @unselectedClass
@@ -60,6 +61,7 @@ class Carrousel
     showImage: (image) ->
         @container.find(".main-image").attr("src", image.url)
 
+
     constructor: (config) ->
 
         @config = $.extend(true, {}, defaultConfig, config)
@@ -73,22 +75,20 @@ class Carrousel
         # Cada imagen es un objeto como {url: 'http://hector.jpg.to', thumbnailUrl: 'http://pequenio-hector.jpg.to'}
 
         thumbnailFor = (image) =>
-                html: "<img src='#{image.url}' style='height: 10%'>"
+                html: "<img src='#{image.url}' class='tumbnail-menu-carrousel'>"
                 callback: =>
-                    log.debug "@showImage: #{typeof @showImage}"
+                    #log.debug "@showImage: #{typeof @showImage}"
                     @showImage image
 
         @menu = new TangoTV.Menu(
                 options: thumbnailFor(image) for image in @options
-        )
+                continuous: true
 
-        s
+        )
         @keyHandler = @menu.keyHandler
 
         # Pasarle parametros "selected" y "continuous" al menu del carrousel        
         # Recibir lista de imagenes por parametro y crear las opciones para el constructor del menu
-
-       
 
 
 TangoTV.Carrousel = Carrousel

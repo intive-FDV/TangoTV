@@ -349,7 +349,9 @@ class Carrousel extends HiddableContent
         @carr = new TangoTV.Carrousel(
             options: [
                 {
-                    url:"http://www.ifondos.net/wp-content/uploads/2009/09/Simpsons_Bart.jpg"
+                    url: "http://www.ifondos.net/wp-content/uploads/2009/09/Simpsons_Bart.jpg"
+                },{
+                    url: "http://www.wescoregames.com/dynimgs/games/wii-los-simpson-el-videojuego/los_simpson___el_videojuego_202580.jpg"
                 },{
                     url: "http://www.soygik.com/wp-content/uploads/2007/11/cart0149.jpg"
                 },{
@@ -357,9 +359,11 @@ class Carrousel extends HiddableContent
                 },{
                     url: "http://www.luigikeynes.com/wp-content/uploads/2010/05/403112.jpg"
                 }
+
             ]
         )
         @keyHandler = @carr.keyHandler
+        #@keyHandler = null
         @carr.drawIn(@container)
     
     getContainer: -> @container
@@ -369,10 +373,10 @@ class Carrousel extends HiddableContent
 class Dashboard extends TangoTV.Screen
 
     show: (content) ->
+        @setKeyHandler content.keyHandler
         @shown?.hide()
         @shown = content
         content.show()
-        @setKeyHandler content.keyHandler
 
     onLoad: ->
         @menu = new TangoTV.Menu(
@@ -407,6 +411,7 @@ class Dashboard extends TangoTV.Screen
         @menu.drawIn('.menu')
 
         addReturnKey = (keyHandler) =>
+            return unless keyHandler?
             keyHandler[@tvKey.KEY_RETURN] = => @setKeyHandler @menu.keyHandler
             keyHandler.keyRef.return = "Menu" if keyHandler.keyRef?
 

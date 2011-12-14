@@ -94,7 +94,7 @@ class Screen
         @keyHandler?.focus?()
         if handler?.keyRef?
             @displayNavKey handler.keyRef
-         else
+        else
             @hideNavKey()
 
     # TODO Add listener anchor programmatically

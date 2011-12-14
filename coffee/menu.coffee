@@ -58,7 +58,6 @@ class Menu
     constructor: (config) ->
         @config = $.extend(true, {}, defaultConfig, config)
         @options = @config.options
-        @container = $(@config.containerSelector)
         @selected = @config.selected if @config.selected?
         if @config.continuous
             @preFirst = @config.options?.length - 1
@@ -70,9 +69,9 @@ class Menu
         # TODO Make key codes configurable (or at least give horizontal alternative)
         @keyHandler =
             focus: =>
-                @container.addClass @focusedClass
+                @container?.addClass? @focusedClass
             stealFocus: =>
-                @container.removeClass @focusedClass
+                @container?.removeClass? @focusedClass
 
         tvKey = new Common.API.TVKeyValue()
         @keyHandler[tvKey.KEY_UP] = =>

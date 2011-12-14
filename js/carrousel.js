@@ -25,26 +25,31 @@
     var defaultConfig;
 
     defaultConfig = {
-      images: []
+      options: []
     };
 
     Carrousel.prototype.drawIn = function(container) {
       this.container = TangoTV.util.resolveToJqueryIfSelector(container);
-      return this.menu.drawIn(container);
+      this.container.append("<FRAMESET><div class='panel-image-carrousel'><img class='main-image'> </div><div class='menu-carrousel'></div></FRAMESET>");
+      this.menu.drawIn('.menu-carrousel');
+      return this.menu.openSelectedItem();
     };
 
-    Carrousel.prototype.showSelectedImage = function(img) {
-      return this.container.append($(img.html));
+    Carrousel.prototype.showImage = function(image) {
+      return this.container.find(".main-image").attr("src", image.url);
     };
 
     function Carrousel(config) {
       var image, thumbnailFor;
+      var _this = this;
       this.config = $.extend(true, {}, defaultConfig, config);
       this.options = this.config.options;
       thumbnailFor = function(image) {
         return {
-          html: "<img src='" + image.url + "' style='height=10%'>",
-          callback: function() {}
+          html: "<img src='" + image.url + "' class='tumbnail-menu-carrousel'>",
+          callback: function() {
+            return _this.showImage(image);
+          }
         };
       };
       this.menu = new TangoTV.Menu({
@@ -57,7 +62,8 @@
             _results.push(thumbnailFor(image));
           }
           return _results;
-        }).call(this)
+        }).call(this),
+        continuous: true
       });
       this.keyHandler = this.menu.keyHandler;
     }

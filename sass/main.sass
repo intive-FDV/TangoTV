@@ -54,32 +54,7 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
     position: relative
     width: $pageWidth
     height: $pageHeight - $titleHeight
-    .menu, #carrousel-container
-        font-size: 1.15em
-        list-style: none
-        position: absolute
-        width: $menuWidth - 2px
-        height: $pageHeight - $titleHeight
-        margin: 0
-        border-right: $lightGray solid 2px
-        padding: 0
-        li
-            background: $lightGray
-            text-shadow: white 1px 1px
-            box-shadow: black 0px 0px 5px
-            display: block
-            width: $menuWidth - 20px - 10px
-            margin: 10px
-            border-radius: 4px
-            padding: 5px 1px 5px 10px
-        .menu-item-selected
-            color: white
-            text-shadow: black 1px 1px
-            background: $gray
-        .menu-item-open
-            padding: 5px 1px 5px 10px
-
-    #carrousel-container
+    .menu
         font-size: 1.15em
         list-style: none
         position: absolute
@@ -194,6 +169,55 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
                 display: inline-block
                 align: center
 
+#carrousel-container
+    //cols: "80%, 20%"
+    font-size: 1.15em
+    list-style: none
+    //position: absolute
+    width: $mainWidth
+    height: $mainHeight
+    margin: 0
+    border-right: $lightGray solid 2px
+    padding: 0
+    .menu-carrousel
+        background: #418415
+        height: 100%
+        width: 20%
+        .menu-item-selected
+            background: $gray
+        .tumbnail-menu-carrousel
+            max-width: 90%
+            //max-height: 200%
+            padding-left: 5%
+    .panel-image-carrousel
+        background: #09418f
+        height: 100%
+        width: 80%
+        text-align: center
+        //paddling-top: 100%
+        margin-top: middle
+        //display: table
+        .main-image
+            max-height: 100%
+            max-width: 100%
+            vertical-align: middle
+            //display: block;
+            //margin: auto;
+//    li
+//        background: $lightGray
+//        text-shadow: white 1px 1px
+//        box-shadow: black 0px 0px 5px
+//        display: block
+//        width: $menuWidth - 20px - 10px
+//        margin: 10px
+//        border-radius: 4px
+//        padding: 5px 1px 5px 10px
+//    .menu-item-selected
+//        color: white
+//        text-shadow: black 1px 1px
+//        background: $gray
+//    .menu-item-open
+//        padding: 5px 1px 5px 10px
 
 .nav-key
     font-family: sans

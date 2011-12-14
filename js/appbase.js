@@ -1,13 +1,17 @@
 (function() {
   var TangoTV, limit, log;
+
   TangoTV = {};
+
   TangoTV.css = {
     switchClasses: function($element, removed, added) {
       $element.removeClass(removed);
       return $element.addClass(added);
     }
   };
+
   limit = function(func, wait, debounce) {};
+
   TangoTV.util = {
     STRING_TYPENAME: "string",
     deepCopy: function(object) {
@@ -29,22 +33,16 @@
       };
     },
     generateRandomId: function(prefix) {
-      if (prefix == null) {
-        prefix = '';
-      }
+      if (prefix == null) prefix = '';
       return "__" + prefix + "_" + (Math.floor(Math.random() * 88888));
     },
     resolveToJqueryIfSelector: function(object) {
-      if (typeof object === TangoTV.util.STRING_TYPENAME) {
-        return $(object);
-      }
+      if (typeof object === TangoTV.util.STRING_TYPENAME) return $(object);
       return object;
     },
     loadScript: function(path, onLoad) {
       var script;
-      if (onLoad == null) {
-        onLoad = (function() {});
-      }
+      if (onLoad == null) onLoad = (function() {});
       script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = path;
@@ -61,16 +59,10 @@
     },
     queryStringParams: function(query, acceptEmptyParams) {
       var eqPos, param, paramMap, params, _i, _len;
-      if (query == null) {
-        query = window.location.search;
-      }
-      if (acceptEmptyParams == null) {
-        acceptEmptyParams = false;
-      }
+      if (query == null) query = window.location.search;
+      if (acceptEmptyParams == null) acceptEmptyParams = false;
       paramMap = {};
-      if (query.indexOf('?') === 0) {
-        query = query.substring(1);
-      }
+      if (query.indexOf('?') === 0) query = query.substring(1);
       while (query.indexOf('&') === 0) {
         query = query.substring(1);
       }
@@ -87,7 +79,9 @@
       return paramMap;
     }
   };
+
   window.TangoTV = TangoTV;
+
   log = {
     levels: {
       TRACE: 5,
@@ -100,9 +94,7 @@
     },
     level: 5,
     log: function(message, level) {
-      if (this.level < this.levels[level]) {
-        return;
-      }
+      if (this.level < this.levels[level]) return;
       return this.append("" + level + " " + message);
     },
     trace: function(m) {
@@ -129,5 +121,7 @@
       return alert(m);
     }
   };
+
   window.log = log;
+
 }).call(this);

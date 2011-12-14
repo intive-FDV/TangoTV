@@ -145,6 +145,34 @@ body {
     display: inline-block;
     align: center; }
 
+#carrousel-container {
+  font-size: 1.15em;
+  list-style: none;
+  width: 810px;
+  height: 442px;
+  margin: 0;
+  border-right: #d3d3d3 solid 2px;
+  padding: 0; }
+  #carrousel-container .menu-carrousel {
+    background: #418415;
+    height: 100%;
+    width: 20%; }
+    #carrousel-container .menu-carrousel .menu-item-selected {
+      background: #aaaaaa; }
+    #carrousel-container .menu-carrousel .tumbnail-menu-carrousel {
+      max-width: 90%;
+      padding-left: 5%; }
+  #carrousel-container .panel-image-carrousel {
+    background: #09418f;
+    height: 100%;
+    width: 80%;
+    text-align: center;
+    margin-top: middle; }
+    #carrousel-container .panel-image-carrousel .main-image {
+      max-height: 100%;
+      max-width: 100%;
+      vertical-align: middle; }
+
 .nav-key {
   font-family: sans;
   font-size: 14px;
@@ -155,6 +183,7 @@ body {
   bottom: 0;
   width: 960px;
   height: 34px;
+  display: none;
   z-index: 10000; }
   .nav-key .key-helper {
     position: absolute;

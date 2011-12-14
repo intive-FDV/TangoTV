@@ -1,30 +1,30 @@
 (function() {
   var Splash, util;
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  };
+  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
   util = TangoTV.util;
+
   Splash = (function() {
     var defaultConfig, defaultParams;
+
     __extends(Splash, TangoTV.Screen);
+
     defaultConfig = {
       timeout: 1000
     };
+
     function Splash(config) {
       this.config = $.extend(true, {}, defaultConfig, config);
       this.container = util.resolveToJqueryIfSelector(this.config.container);
       Splash.__super__.constructor.call(this, this.container);
     }
+
     Splash.prototype.onLoad = function() {
       log.debug("Splash.onLoad");
       Splash.__super__.onLoad.call(this);
       return this.initSplashTimeout();
     };
+
     Splash.prototype.initSplashTimeout = function() {
       var that;
       that = this;
@@ -32,7 +32,9 @@
         return that.advance();
       }, this.config.timeout);
     };
+
     defaultParams = ['country', 'language', 'lang', 'modelid', 'server', 'firmware', 'remocon', 'area'];
+
     Splash.prototype.advance = function() {
       var nextPageUri, p, params, queryString, uri, _i, _len;
       params = util.queryStringParams();
@@ -43,18 +45,18 @@
         queryString += "&" + p + "=" + params[p];
       }
       nextPageUri = '';
-      if (uri.protocol) {
-        nextPageUri += "" + uri.protocol + "://";
-      }
+      if (uri.protocol) nextPageUri += "" + uri.protocol + "://";
       nextPageUri += "" + (String(uri.authority)) + (String(uri.path));
       nextPageUri += "" + queryString;
-      if (uri.anchor) {
-        nextPageUri += "#" + uri.anchor;
-      }
+      if (uri.anchor) nextPageUri += "#" + uri.anchor;
       log.debug("Advancing to uri: " + nextPageUri);
       return this.loadPage(nextPageUri);
     };
+
     return Splash;
+
   })();
+
   TangoTV.Splash = Splash;
+
 }).call(this);
