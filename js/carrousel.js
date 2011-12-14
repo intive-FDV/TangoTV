@@ -45,8 +45,10 @@
       this.config = $.extend(true, {}, defaultConfig, config);
       this.options = this.config.options;
       thumbnailFor = function(image) {
+        var thumb, _ref;
+        thumb = (_ref = image.thumbnailUrl) != null ? _ref : image.url;
         return {
-          html: "<img src='" + image.url + "' class='tumbnail-menu-carrousel'>",
+          html: "<img src='" + thumb + "' class='tumbnail-menu-carrousel'>",
           callback: function() {
             return _this.showImage(image);
           }

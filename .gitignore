@@ -1,3 +1,6 @@
 .idea/
 .sass-cache/
 *.iml
+.ls_archivos*
+.ref_coffee*
+.ref_sass*

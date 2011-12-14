@@ -502,7 +502,8 @@
       this.carr = new TangoTV.Carrousel({
         options: [
           {
-            url: "http://www.ifondos.net/wp-content/uploads/2009/09/Simpsons_Bart.jpg"
+            url: "http://www.ifondos.net/wp-content/uploads/2009/09/Simpsons_Bart.jpg",
+            thumbnailUrl: "http://www.imagendiaria.com/fotos/foto-marge-simpson.thumbnail.png"
           }, {
             url: "http://www.wescoregames.com/dynimgs/games/wii-los-simpson-el-videojuego/los_simpson___el_videojuego_202580.jpg"
           }, {

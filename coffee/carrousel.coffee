@@ -75,7 +75,8 @@ class Carrousel
         # Cada imagen es un objeto como {url: 'http://hector.jpg.to', thumbnailUrl: 'http://pequenio-hector.jpg.to'}
 
         thumbnailFor = (image) =>
-                html: "<img src='#{image.url}' class='tumbnail-menu-carrousel'>"
+                thumb= image.thumbnailUrl ? image.url
+                html: "<img src='#{thumb}' class='tumbnail-menu-carrousel'>"
                 callback: =>
                     #log.debug "@showImage: #{typeof @showImage}"
                     @showImage image
