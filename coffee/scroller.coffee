@@ -29,6 +29,7 @@ class Scroller
         @scrollVertical(- @config.vStep)
 
     scrollVertical: (amount) ->
+        log.debug amount
         @element.scrollTop(@position.y + amount)
         scrollOffset = @element.scrollTop()
         if @position.y != scrollOffset

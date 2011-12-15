@@ -359,6 +359,10 @@ class Carrousel extends HiddableContent
                     url: "http://www.soygik.com/wp-content/uploads/2007/11/harry-potter-simpsons.jpg"
                 },{
                     url: "http://www.luigikeynes.com/wp-content/uploads/2010/05/403112.jpg"
+                },{
+                    url: "http://www.appsmashups.com/wp-content/uploads/2009/01/fc-148-simpsons-1.jpg"
+                },{
+                    url: "http://www.dotpod.com.ar/wp-content/uploads/2011/01/18-Dr.-House-02-66-personajes-y-celebridades-versi%C3%B3n-Simpsons.gif"
                 }
 
             ]

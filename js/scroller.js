@@ -34,6 +34,7 @@
 
     Scroller.prototype.scrollVertical = function(amount) {
       var scrollOffset, _base, _base2;
+      log.debug(amount);
       this.element.scrollTop(this.position.y + amount);
       scrollOffset = this.element.scrollTop();
       if (this.position.y !== scrollOffset) {
