@@ -157,19 +157,20 @@ body {
     background: #418415;
     height: 100%;
     width: 20%;
-    overflow: scroll; }
+    overflow: scroll;
+    text-align: center; }
     #carrousel-container .menu-carrousel .menu-item-selected {
       background: #aaaaaa; }
     #carrousel-container .menu-carrousel .tumbnail-menu-carrousel {
       max-width: 90%;
-      max-height: 50%;
-      padding-left: 5%; }
+      max-height: 88.4px; }
+  #carrousel-container .scroller-menu {
+    background: #d3d3d3; }
   #carrousel-container .panel-image-carrousel {
     background: #09418f;
     height: 100%;
     width: 80%;
-    text-align: center;
-    margin-top: middle; }
+    text-align: center; }
     #carrousel-container .panel-image-carrousel .main-image {
       max-height: 100%;
       max-width: 100%;

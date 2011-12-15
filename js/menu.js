@@ -16,6 +16,7 @@
         selected: index of the initially selected option. Defaults to 0
         itemTemplate: function that builds a menu item returning a HTML string of such,
             recieves a HTML string with the content of the item and a list of CSS classes
+        autoOpenSelected: call openSelected  when the selection change. Defaults to false
     
         Currently, the menu items can only be selected through the UP and DOWN keys
     
@@ -33,7 +34,8 @@
           classString += "" + klass + " ";
         }
         return "<li class=\"" + classString + "\">\n    " + content + "\n</li>";
-      }
+      },
+      autoOpenSelected: false
     };
 
     Menu.prototype.selected = 0;
@@ -61,7 +63,8 @@
     Menu.prototype.selectItem = function(index) {
       TangoTV.css.switchClasses($(this.items[this.selected]), this.selectedClass, this.unselectedClass);
       this.selected = index;
-      return TangoTV.css.switchClasses($(this.items[this.selected]), this.unselectedClass, this.selectedClass);
+      TangoTV.css.switchClasses($(this.items[this.selected]), this.unselectedClass, this.selectedClass);
+      if (this.config.autoOpenSelected) return this.openSelectedItem();
     };
 
     Menu.prototype.openSelectedItem = function() {

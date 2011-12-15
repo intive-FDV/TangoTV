@@ -184,19 +184,21 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
         height: 100%
         width: 20%
         overflow: scroll
+        text-align: center
         .menu-item-selected
             background: $gray
         .tumbnail-menu-carrousel
             max-width: 90%
-            max-height: 50%
-            padding-left: 5%
+            max-height: $mainHeight/5
+    .scroller-menu
+        background: $lightGray
     .panel-image-carrousel
         background: #09418f
         height: 100%
         width: 80%
         text-align: center
         //paddling-top: 100%
-        margin-top: middle
+        //margin-top: middle
         //display: table
         .main-image
             max-height: 100%

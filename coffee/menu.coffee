@@ -12,6 +12,7 @@ class Menu
     selected: index of the initially selected option. Defaults to 0
     itemTemplate: function that builds a menu item returning a HTML string of such,
         recieves a HTML string with the content of the item and a list of CSS classes
+    autoOpenSelected: call openSelected  when the selection change. Defaults to false
 
     Currently, the menu items can only be selected through the UP and DOWN keys
 
@@ -29,11 +30,14 @@ class Menu
                 </li>
             """
 
+        autoOpenSelected: false
+
     selected: 0
     focusedClass: "menu-focused"
     openClass: "menu-item-open"
     selectedClass: "menu-item-selected"
     unselectedClass: "menu-item-unselected"
+
 
     drawIn: (container) ->
         @container = TangoTV.util.resolveToJqueryIfSelector(container)
@@ -48,6 +52,8 @@ class Menu
         TangoTV.css.switchClasses $(@items[@selected]), @selectedClass, @unselectedClass
         @selected = index
         TangoTV.css.switchClasses $(@items[@selected]), @unselectedClass, @selectedClass
+        if @config.autoOpenSelected
+            @openSelectedItem()
 
     openSelectedItem: ->
         @container.find(".#{@openClass}").removeClass(@openClass)
