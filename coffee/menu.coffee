@@ -65,6 +65,7 @@ class Menu
         @config = $.extend(true, {}, defaultConfig, config)
         @options = @config.options
         @selected = @config.selected if @config.selected?
+
         if @config.continuous
             @preFirst = @config.options?.length - 1
             @postLast = 0
@@ -90,6 +91,8 @@ class Menu
         @keyHandler.keyRef =
             "enter": "Select"
             "up-down": "Move"
+
+
 
     offset: (amount) ->
         selected = @selected + amount

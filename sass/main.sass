@@ -170,10 +170,8 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
                 align: center
 
 #carrousel-container
-    //cols: "80%, 20%"
     font-size: 1.15em
     list-style: none
-    //position: absolute
     width: $mainWidth
     height: $mainHeight
     margin: 0
@@ -185,42 +183,25 @@ $mainHeight: $pageHeight - $titleHeight - $navKeyHeight
         width: 20%
         overflow: scroll
         text-align: center
+        li
+            width:  100%
+            padding: 1px 2px 1px 1px
         .menu-item-selected
-            background: $gray
+            background: #09418f
+            padding: 1px 2px 1px 1px
         .tumbnail-menu-carrousel
             max-width: 90%
-            max-height: $mainHeight/3
-    .scroller-menu
-        //background: $lightGray
+            max-height: $mainHeight/4
     .panel-image-carrousel
         background: #09418f
         height: 100%
         width: 80%
         text-align: center
-        //paddling-top: 100%
-        //margin-top: middle
-        //display: table
         .main-image
             max-height: 100%
             max-width: 100%
             vertical-align: middle
-            //display: block;
-            //margin: auto;
-//    li
-//        background: $lightGray
-//        text-shadow: white 1px 1px
-//        box-shadow: black 0px 0px 5px
-//        display: block
-//        width: $menuWidth - 20px - 10px
-//        margin: 10px
-//        border-radius: 4px
-//        padding: 5px 1px 5px 10px
-//    .menu-item-selected
-//        color: white
-//        text-shadow: black 1px 1px
-//        background: $gray
-//    .menu-item-open
-//        padding: 5px 1px 5px 10px
+
 
 .nav-key
     font-family: sans

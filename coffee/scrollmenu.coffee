@@ -1,17 +1,19 @@
 class ScrollMenu extends TangoTV.Menu
 
 
-    #defaultConfig =
-        #options: []
-        #element: '#scroll-menu-panel'
     selectItem: (index) ->
         super index
         posX =  $(@items[@selected]).position().top
-        height= $(@items[@selected]).height()
-        log.debug posX
-        if ( posX + height > $(@container).height()+ @moved)
-            @scroller?.scrollVertical(posX + height - $(@container).height()-@moved)
-            @moved = posX + height - $(@container).height()
+        if( posX - @moved < 0)
+            dif = posX - @moved
+            @scroller?.scrollVertical(dif)
+            @moved += dif
+        else
+            height= $(@items[@selected]).height() + parseInt($(@items[@selected]).css("padding-top"))
+
+            if ( posX + height > $(@container).height()+ @moved)
+                @scroller?.scrollVertical(posX + height - $(@container).height() - @moved)
+                @moved = posX + height - $(@container).height()
 
     drawIn: (container) ->
 
@@ -19,13 +21,13 @@ class ScrollMenu extends TangoTV.Menu
         @container = TangoTV.util.resolveToJqueryIfSelector(container).addClass("scroller-menu")
         @scroller = new TangoTV.Scroller({
             element: ".scroller-menu"
+            bar:
+                show: @config.bar
         })
 
     constructor: (config) ->
         super(config)
         @moved = 0
-        #@scroller = new TangoTV.Scroller({
-         #   element: ".scroller-menu"
-        #})
+        @config.bar = config.bar ? false
 
 TangoTV.ScrollMenu = ScrollMenu

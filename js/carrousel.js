@@ -9,14 +9,16 @@
         options: List of image items, each an object with "url" and "thumbnailUrl" properties
             url: the link to the image
             thumbnailUrl: link to teh preview image show in the carrousel menu
-        autoShow: specifies when the image is showing automatically
+        autoShow: specifies when the image is showing automatically. Defaults to true
+        scrolleable: specifies when the menu is scrolleable. Defaults to true
     */
 
     var defaultConfig;
 
     defaultConfig = {
       options: [],
-      autoShow: true
+      autoShow: true,
+      scrolleable: true
     };
 
     Carrousel.prototype.drawIn = function(container) {
@@ -31,7 +33,7 @@
     };
 
     function Carrousel(config) {
-      var image, thumbnailFor;
+      var configForMenu, image, thumbnailFor;
       var _this = this;
       this.config = $.extend(true, {}, defaultConfig, config);
       this.options = this.config.options;
@@ -44,7 +46,7 @@
           }
         };
       };
-      this.menu = new TangoTV.ScrollMenu({
+      configForMenu = {
         options: (function() {
           var _i, _len, _ref, _results;
           _ref = this.options;
@@ -57,7 +59,12 @@
         }).call(this),
         continuous: true,
         autoOpenSelected: this.config.autoShow
-      });
+      };
+      if (this.config.scrolleable) {
+        this.menu = new TangoTV.ScrollMenu(configForMenu);
+      } else {
+        this.menu = new TangoTV.Menu(configForMenu);
+      }
       this.keyHandler = this.menu.keyHandler;
     }
 

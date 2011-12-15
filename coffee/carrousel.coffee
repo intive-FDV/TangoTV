@@ -5,14 +5,15 @@ class Carrousel
     options: List of image items, each an object with "url" and "thumbnailUrl" properties
         url: the link to the image
         thumbnailUrl: link to teh preview image show in the carrousel menu
-    autoShow: specifies when the image is showing automatically
-
+    autoShow: specifies when the image is showing automatically. Defaults to true
+    scrolleable: specifies when the menu is scrolleable. Defaults to true
 
     ###
 
     defaultConfig =
         options: []
         autoShow: true
+        scrolleable: true
 
     drawIn: (container) ->
         @container = TangoTV.util.resolveToJqueryIfSelector(container)
@@ -36,17 +37,18 @@ class Carrousel
                 callback: =>
                     #log.debug "@showImage: #{typeof @showImage}"
                     @showImage image
-
-        @menu = new TangoTV.ScrollMenu(
-                options: thumbnailFor(image) for image in @options
-                continuous: true
-                autoOpenSelected: @config.autoShow
-
-        )
+        configForMenu = {
+            options: thumbnailFor(image) for image in @options
+            continuous: true
+            autoOpenSelected: @config.autoShow
+        }
+        if @config.scrolleable
+            @menu = new TangoTV.ScrollMenu(configForMenu)
+        else
+            @menu = new TangoTV.Menu(configForMenu)
         @keyHandler = @menu.keyHandler
 
-        # Pasarle parametros "selected" y "continuous" al menu del carrousel        
-        # Recibir lista de imagenes por parametro y crear las opciones para el constructor del menu
+
 
 
 TangoTV.Carrousel = Carrousel

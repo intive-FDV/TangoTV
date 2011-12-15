@@ -159,11 +159,15 @@ body {
     width: 20%;
     overflow: scroll;
     text-align: center; }
+    #carrousel-container .menu-carrousel li {
+      width: 100%;
+      padding: 1px 2px 1px 1px; }
     #carrousel-container .menu-carrousel .menu-item-selected {
-      background: #aaaaaa; }
+      background: #09418f;
+      padding: 1px 2px 1px 1px; }
     #carrousel-container .menu-carrousel .tumbnail-menu-carrousel {
       max-width: 90%;
-      max-height: 147.333px; }
+      max-height: 110.5px; }
   #carrousel-container .panel-image-carrousel {
     background: #09418f;
     height: 100%;
