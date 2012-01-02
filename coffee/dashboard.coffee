@@ -298,11 +298,12 @@ class YouTube extends HiddableContent
     getContainer: -> @container
 
     constructor: (config) ->
+        videoId = 'FAYGHTqPMA8'
         @container = TangoTV.util.resolveToJqueryIfSelector(config.container)
         @player =  new TangoTV.YouTubePlayer(
             container: @container
-            videoId: 'FAYGHTqPMA8'
             autohide: false
+            onReady: => @player.load(videoId, true)
         )
 
         @keyHandler = {}
