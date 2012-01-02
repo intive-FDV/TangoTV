@@ -180,7 +180,6 @@ class TangoTV.YouTubePlayer
 
         @container.get(0).innerHTML = youtubeTemplate(
             elementId: @elementId
-            videoId: @config.videoId
             autohide: if @config.autohide then 1 else 0
             allowFullScreen: @config.allowFullScreen
             width: @config.width
@@ -225,8 +224,11 @@ class TangoTV.YouTubePlayer
         @player.addEventListener('onStateChange', @addEventListener())
         @config.onReady?()
 
-    load: (videoId) ->
-        @player?.cueVideoById(videoId)
+    load: (videoId, play = false) ->
+        if play
+            @player?.loadVideoById(videoId)
+        else
+            @player?.cueVideoById(videoId)
 
     play: ->
         @player?.playVideo()
@@ -247,10 +249,11 @@ youtubeTemplate = (p) ->
     <object
             id='#{p.elementId}' class='embed'
             type='application/x-shockwave-flash'
-            data='http://www.youtube.com/v/#{p.videoId}?autohide=#{p.autohide}&enablejsapi=1&playerapiid=#{p.elementId}&showinfo=0'
-            style="height: #{p.height}px; width: #{p.width}px">
+            data='http://www.youtube.com/apiplayer?autohide=#{p.autohide}&enablejsapi=1&playerapiid=#{p.elementId}&showinfo=0'
+            style="height: #{p.height}px; width: #{p.width}px" width="#{p.width}" height="#{p.height}">
 
         <param name="allowFullScreen" value="#{p.allowFullScreen}">
         <param name="allowScriptAccess" value="always">
+        <param name="wmode" value="transparent">
     </object>
     """
